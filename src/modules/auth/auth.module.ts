@@ -9,6 +9,7 @@ import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { RegisterUserHandler } from './application/commands/register-user.handler';
 import { LoginUserHandler } from './application/queries/login-user.handler';
 import { AuthController } from './presentation/auth.controller';
+import { PreferencesModule } from '../preferences/preferences.module';
 
 const CommandHandlers = [RegisterUserHandler];
 const QueryHandlers = [LoginUserHandler];
@@ -17,6 +18,7 @@ const QueryHandlers = [LoginUserHandler];
   imports: [
     CqrsModule,
     PassportModule,
+    PreferencesModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('jwt.secret'),
@@ -34,6 +36,6 @@ const QueryHandlers = [LoginUserHandler];
     { provide: USER_REPOSITORY, useClass: MikroOrmUserRepository },
     JwtStrategy,
   ],
-  exports: [JwtModule, PassportModule],
+  exports: [JwtModule, PassportModule, USER_REPOSITORY],
 })
 export class AuthModule {}

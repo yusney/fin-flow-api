@@ -20,6 +20,8 @@ describe('LoginUserHandler', () => {
       findById: jest.fn(),
       findByEmail: jest.fn(),
       save: jest.fn(),
+      persist: jest.fn(),
+      update: jest.fn(),
     };
     hashingService = {
       hash: jest.fn(),

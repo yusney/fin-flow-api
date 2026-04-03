@@ -15,8 +15,16 @@ export class MikroOrmUserRepository implements IUserRepository {
     return this.em.findOne(User, { email });
   }
 
+  persist(user: User): void {
+    this.em.persist(user);
+  }
+
   async save(user: User): Promise<void> {
     this.em.persist(user);
+    await this.em.flush();
+  }
+
+  async update(user: User): Promise<void> {
     await this.em.flush();
   }
 }

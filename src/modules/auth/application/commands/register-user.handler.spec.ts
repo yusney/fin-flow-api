@@ -2,31 +2,44 @@ import { RegisterUserHandler } from './register-user.handler';
 import { RegisterUserCommand } from './register-user.command';
 import { IUserRepository } from '../../domain/ports/user.repository';
 import { IHashingService } from '../../../../shared/application/ports/hashing.port';
+import { IUserPreferencesRepository } from '../../../preferences/domain/ports/user-preferences.repository';
 import { User } from '../../domain/entities/user.entity';
+import { UserPreferences } from '../../../preferences/domain/entities/user-preferences.entity';
 import { ConflictException } from '../../../../shared/domain/exceptions';
 
 describe('RegisterUserHandler', () => {
   let handler: RegisterUserHandler;
   let userRepository: jest.Mocked<IUserRepository>;
   let hashingService: jest.Mocked<IHashingService>;
+  let preferencesRepository: jest.Mocked<IUserPreferencesRepository>;
 
   beforeEach(() => {
     userRepository = {
       findById: jest.fn(),
       findByEmail: jest.fn(),
+      persist: jest.fn(),
       save: jest.fn(),
+      update: jest.fn(),
     };
     hashingService = {
       hash: jest.fn(),
       compare: jest.fn(),
     };
-    handler = new RegisterUserHandler(userRepository, hashingService);
+    preferencesRepository = {
+      findByUserId: jest.fn(),
+      save: jest.fn(),
+    };
+    handler = new RegisterUserHandler(
+      userRepository,
+      hashingService,
+      preferencesRepository,
+    );
   });
 
-  it('should register a user with valid data and return { id }', async () => {
+  it('should register a user with default preferences and return { id }', async () => {
     userRepository.findByEmail.mockResolvedValue(null);
     hashingService.hash.mockResolvedValue('hashed-password');
-    userRepository.save.mockResolvedValue(undefined);
+    preferencesRepository.save.mockResolvedValue(undefined);
 
     const command = new RegisterUserCommand(
       'John Doe',
@@ -39,7 +52,10 @@ describe('RegisterUserHandler', () => {
     expect(typeof result.id).toBe('string');
     expect(userRepository.findByEmail).toHaveBeenCalledWith('john@example.com');
     expect(hashingService.hash).toHaveBeenCalledWith('password123');
-    expect(userRepository.save).toHaveBeenCalledWith(expect.any(User));
+    expect(userRepository.persist).toHaveBeenCalledWith(expect.any(User));
+    expect(preferencesRepository.save).toHaveBeenCalledWith(
+      expect.any(UserPreferences),
+    );
   });
 
   it('should throw ConflictException when email is already taken', async () => {
@@ -57,6 +73,7 @@ describe('RegisterUserHandler', () => {
     );
 
     await expect(handler.execute(command)).rejects.toThrow(ConflictException);
-    expect(userRepository.save).not.toHaveBeenCalled();
+    expect(userRepository.persist).not.toHaveBeenCalled();
+    expect(preferencesRepository.save).not.toHaveBeenCalled();
   });
 });
