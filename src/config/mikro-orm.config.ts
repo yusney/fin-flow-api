@@ -14,4 +14,5 @@ export default defineConfig({
     path: './src/migrations',
   },
   debug: process.env.NODE_ENV === 'development',
+  allowGlobalContext: true,
 });

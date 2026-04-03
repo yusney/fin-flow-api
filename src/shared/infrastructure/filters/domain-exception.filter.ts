@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import {
   DomainException,
+  ForbiddenException,
   NotFoundException,
   ConflictException,
   ValidationException,
@@ -18,8 +19,11 @@ export class DomainExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    if (exception instanceof NotFoundException) status = HttpStatus.NOT_FOUND;
-    else if (exception instanceof ConflictException) status = HttpStatus.CONFLICT;
+    if (exception instanceof ForbiddenException) status = HttpStatus.FORBIDDEN;
+    else if (exception instanceof NotFoundException)
+      status = HttpStatus.NOT_FOUND;
+    else if (exception instanceof ConflictException)
+      status = HttpStatus.CONFLICT;
     else if (exception instanceof ValidationException)
       status = HttpStatus.BAD_REQUEST;
 

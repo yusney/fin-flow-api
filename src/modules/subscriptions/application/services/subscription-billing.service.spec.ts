@@ -15,13 +15,17 @@ describe('SubscriptionBillingService', () => {
       findById: jest.fn(),
       findByUserId: jest.fn(),
       findActiveDueToday: jest.fn(),
+      findHistoryByRootId: jest.fn(),
       save: jest.fn(),
       update: jest.fn(),
     };
     commandBus = {
       execute: jest.fn(),
     } as any;
-    service = new SubscriptionBillingService(subscriptionRepository, commandBus);
+    service = new SubscriptionBillingService(
+      subscriptionRepository,
+      commandBus,
+    );
   });
 
   it('should call findActiveDueToday with day and isLastDayOfMonth flag', async () => {
@@ -30,9 +34,16 @@ describe('SubscriptionBillingService', () => {
     await service.handleBilling();
 
     const today = new Date().getDate();
-    const lastDay = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+    const lastDay = new Date(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      0,
+    ).getDate();
     const isLastDay = today === lastDay;
-    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(today, isLastDay);
+    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(
+      today,
+      isLastDay,
+    );
   });
 
   it('should call CommandBus.execute for each active subscription due today', async () => {
@@ -236,7 +247,10 @@ describe('SubscriptionBillingService', () => {
 
     await service.handleBilling();
 
-    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(28, true);
+    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(
+      28,
+      true,
+    );
     expect(commandBus.execute).toHaveBeenCalledTimes(1);
 
     jest.useRealTimers();
@@ -261,7 +275,10 @@ describe('SubscriptionBillingService', () => {
 
     await service.handleBilling();
 
-    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(30, true);
+    expect(subscriptionRepository.findActiveDueToday).toHaveBeenCalledWith(
+      30,
+      true,
+    );
     expect(commandBus.execute).toHaveBeenCalledTimes(1);
 
     jest.useRealTimers();

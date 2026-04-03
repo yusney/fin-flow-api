@@ -15,6 +15,7 @@ export class Subscription extends BaseEntity {
   public frequency: BillingFrequency;
   public type: SubscriptionType;
   public serviceUrl: string | null;
+  public parentId: string | null;
 
   constructor(
     amount: number,
@@ -29,6 +30,7 @@ export class Subscription extends BaseEntity {
     type: SubscriptionType,
     serviceUrl: string | null,
     id?: string,
+    parentId: string | null = null,
   ) {
     super(id);
     this.amount = amount;
@@ -42,6 +44,7 @@ export class Subscription extends BaseEntity {
     this.frequency = frequency;
     this.type = type;
     this.serviceUrl = serviceUrl;
+    this.parentId = parentId;
   }
 
   static create(props: {
@@ -57,6 +60,7 @@ export class Subscription extends BaseEntity {
     type?: SubscriptionType;
     serviceUrl?: string | null;
     id?: string;
+    parentId?: string | null;
   }): Subscription {
     if (!props.amount || props.amount <= 0) {
       throw new ValidationException('Amount must be a positive number');
@@ -73,7 +77,9 @@ export class Subscription extends BaseEntity {
       props.billingDay > 31 ||
       !Number.isInteger(props.billingDay)
     ) {
-      throw new ValidationException('Billing day must be an integer between 1 and 31');
+      throw new ValidationException(
+        'Billing day must be an integer between 1 and 31',
+      );
     }
 
     const type = props.type ?? SubscriptionType.GENERAL;
@@ -81,14 +87,22 @@ export class Subscription extends BaseEntity {
     const endDate = props.endDate ?? null;
 
     if (type === SubscriptionType.DIGITAL_SERVICE && !serviceUrl) {
-      throw new ValidationException('Service URL is required for digital service subscriptions');
+      throw new ValidationException(
+        'Service URL is required for digital service subscriptions',
+      );
     }
 
     if (type === SubscriptionType.GENERAL && serviceUrl) {
-      throw new ValidationException('Service URL is only allowed for digital service subscriptions');
+      throw new ValidationException(
+        'Service URL is only allowed for digital service subscriptions',
+      );
     }
 
-    if (serviceUrl && !serviceUrl.startsWith('http://') && !serviceUrl.startsWith('https://')) {
+    if (
+      serviceUrl &&
+      !serviceUrl.startsWith('http://') &&
+      !serviceUrl.startsWith('https://')
+    ) {
       throw new ValidationException('Service URL must be a valid URL');
     }
 
@@ -109,15 +123,45 @@ export class Subscription extends BaseEntity {
       type,
       serviceUrl,
       props.id,
+      props.parentId ?? null,
     );
   }
 
-  static clampBillingDay(billingDay: number, month: number, year: number): number {
+  static clampBillingDay(
+    billingDay: number,
+    month: number,
+    year: number,
+  ): number {
     const lastDay = new Date(year, month, 0).getDate();
     return Math.min(billingDay, lastDay);
   }
 
   toggle(): void {
     this.isActive = !this.isActive;
+  }
+
+  closeVersion(endDate: Date): void {
+    this.endDate = endDate;
+    this.isActive = false;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      amount: this.amount,
+      description: this.description,
+      billingDay: this.billingDay,
+      categoryId: this.categoryId,
+      userId: this.userId,
+      isActive: this.isActive,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      frequency: this.frequency,
+      type: this.type,
+      serviceUrl: this.serviceUrl,
+      parentId: this.parentId,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 }

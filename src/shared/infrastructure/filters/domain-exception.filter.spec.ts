@@ -2,6 +2,7 @@ import { ArgumentsHost, HttpStatus } from '@nestjs/common';
 import { DomainExceptionFilter } from './domain-exception.filter';
 import {
   DomainException,
+  ForbiddenException,
   NotFoundException,
   ConflictException,
   ValidationException,
@@ -24,6 +25,19 @@ describe('DomainExceptionFilter', () => {
         getRequest: () => ({}),
       }),
     } as unknown as ArgumentsHost;
+  });
+
+  it('should map ForbiddenException to HTTP 403', () => {
+    const exception = new ForbiddenException('Access denied');
+
+    filter.catch(exception, mockHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.FORBIDDEN,
+      message: 'Access denied',
+      error: 'ForbiddenException',
+    });
   });
 
   it('should map NotFoundException to HTTP 404', () => {

@@ -6,15 +6,13 @@ import type { ISubscriptionRepository } from '../../domain/ports/subscription.re
 import { Subscription } from '../../domain/entities/subscription.entity';
 
 @CommandHandler(CreateSubscriptionCommand)
-export class CreateSubscriptionHandler
-  implements ICommandHandler<CreateSubscriptionCommand>
-{
+export class CreateSubscriptionHandler implements ICommandHandler<CreateSubscriptionCommand> {
   constructor(
     @Inject(SUBSCRIPTION_REPOSITORY)
     private readonly subscriptionRepository: ISubscriptionRepository,
   ) {}
 
-  async execute(command: CreateSubscriptionCommand): Promise<{ id: string }> {
+  async execute(command: CreateSubscriptionCommand) {
     const subscription = Subscription.create({
       amount: command.amount,
       description: command.description,
@@ -30,6 +28,6 @@ export class CreateSubscriptionHandler
 
     await this.subscriptionRepository.save(subscription);
 
-    return { id: subscription.id };
+    return subscription.toJSON();
   }
 }

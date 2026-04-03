@@ -12,9 +12,7 @@ import {
 } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(CreateBudgetCommand)
-export class CreateBudgetHandler
-  implements ICommandHandler<CreateBudgetCommand>
-{
+export class CreateBudgetHandler implements ICommandHandler<CreateBudgetCommand> {
   constructor(
     @Inject(BUDGET_REPOSITORY)
     private readonly budgetRepository: IBudgetRepository,
@@ -22,7 +20,7 @@ export class CreateBudgetHandler
     private readonly categoryRepository: ICategoryRepository,
   ) {}
 
-  async execute(command: CreateBudgetCommand): Promise<{ id: string }> {
+  async execute(command: CreateBudgetCommand) {
     const category = await this.categoryRepository.findById(command.categoryId);
 
     if (!category || category.userId !== command.userId) {
@@ -46,7 +44,7 @@ export class CreateBudgetHandler
     if (existingBudget) {
       existingBudget.limitAmount = command.limitAmount;
       await this.budgetRepository.update(existingBudget);
-      return { id: existingBudget.id };
+      return existingBudget.toJSON();
     }
 
     const budget = Budget.create({
@@ -59,6 +57,6 @@ export class CreateBudgetHandler
 
     await this.budgetRepository.save(budget);
 
-    return { id: budget.id };
+    return budget.toJSON();
   }
 }

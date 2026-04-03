@@ -12,6 +12,7 @@ describe('GetSubscriptionsHandler', () => {
       findById: jest.fn(),
       findByUserId: jest.fn(),
       findActiveDueToday: jest.fn(),
+      findHistoryByRootId: jest.fn(),
       save: jest.fn(),
       update: jest.fn(),
     };
@@ -44,7 +45,9 @@ describe('GetSubscriptionsHandler', () => {
 
     expect(result).toHaveLength(2);
     expect(result).toEqual(subscriptions);
-    expect(subscriptionRepository.findByUserId).toHaveBeenCalledWith('user-uuid');
+    expect(subscriptionRepository.findByUserId).toHaveBeenCalledWith(
+      'user-uuid',
+    );
   });
 
   it('should return empty array when user has no subscriptions', async () => {

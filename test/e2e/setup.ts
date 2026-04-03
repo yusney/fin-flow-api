@@ -12,18 +12,27 @@ import { CategoriesModule } from '../../src/modules/categories/categories.module
 import { TransactionsModule } from '../../src/modules/transactions/transactions.module';
 import { BudgetsModule } from '../../src/modules/budgets/budgets.module';
 import { SubscriptionsModule } from '../../src/modules/subscriptions/subscriptions.module';
+import { SubscriptionTemplatesModule } from '../../src/modules/subscription-templates/subscription-templates.module';
 import { UserSchema } from '../../src/modules/auth/infrastructure/persistence/user.schema';
 import { CategorySchema } from '../../src/modules/categories/infrastructure/persistence/category.schema';
 import { TransactionSchema } from '../../src/modules/transactions/infrastructure/persistence/transaction.schema';
 import { BudgetSchema } from '../../src/modules/budgets/infrastructure/persistence/budget.schema';
 import { SubscriptionSchema } from '../../src/modules/subscriptions/infrastructure/persistence/subscription.schema';
+import { SubscriptionTemplateSchema } from '../../src/modules/subscription-templates/infrastructure/persistence/subscription-template.schema';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const supertest = require('supertest');
 
 const testOrmConfig = defineConfig({
   dbName: ':memory:',
-  entities: [UserSchema, CategorySchema, TransactionSchema, BudgetSchema, SubscriptionSchema],
+  entities: [
+    UserSchema,
+    CategorySchema,
+    TransactionSchema,
+    BudgetSchema,
+    SubscriptionSchema,
+    SubscriptionTemplateSchema,
+  ],
   allowGlobalContext: true,
 });
 
@@ -43,6 +52,7 @@ export async function createTestApp(): Promise<INestApplication> {
       TransactionsModule,
       BudgetsModule,
       SubscriptionsModule,
+      SubscriptionTemplatesModule,
     ],
   }).compile();
 

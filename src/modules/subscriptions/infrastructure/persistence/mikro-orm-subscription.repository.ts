@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager } from '@mikro-orm/core';
-import { ISubscriptionRepository } from '../../domain/ports/subscription.repository';
+import { EntityManager, FilterQuery } from '@mikro-orm/core';
+import type { ISubscriptionRepository } from '../../domain/ports/subscription.repository';
 import { Subscription } from '../../domain/entities/subscription.entity';
 
 @Injectable()
@@ -12,17 +12,29 @@ export class MikroOrmSubscriptionRepository implements ISubscriptionRepository {
   }
 
   async findByUserId(userId: string): Promise<Subscription[]> {
-    return this.em.find(Subscription, { userId }, { orderBy: { createdAt: 'DESC' } });
+    return this.em.find(
+      Subscription,
+      { userId, endDate: null },
+      { orderBy: { createdAt: 'DESC' } },
+    );
   }
 
-  async findActiveDueToday(day: number, isLastDayOfMonth: boolean): Promise<Subscription[]> {
-    const filter: any = { isActive: true };
-    if (isLastDayOfMonth) {
-      filter.billingDay = { $gte: day };
-    } else {
-      filter.billingDay = day;
-    }
+  async findActiveDueToday(
+    day: number,
+    isLastDayOfMonth: boolean,
+  ): Promise<Subscription[]> {
+    const filter: FilterQuery<Subscription> = isLastDayOfMonth
+      ? { isActive: true, billingDay: { $gte: day } }
+      : { isActive: true, billingDay: day };
     return this.em.find(Subscription, filter);
+  }
+
+  async findHistoryByRootId(rootId: string): Promise<Subscription[]> {
+    return this.em.find(
+      Subscription,
+      { $or: [{ id: rootId }, { parentId: rootId }] },
+      { orderBy: { startDate: 'ASC' } },
+    );
   }
 
   async save(subscription: Subscription): Promise<void> {

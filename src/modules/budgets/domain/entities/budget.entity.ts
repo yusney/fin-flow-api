@@ -53,4 +53,17 @@ export class Budget extends BaseEntity {
       props.id,
     );
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      limitAmount: this.limitAmount,
+      month: this.month,
+      year: this.year,
+      categoryId: this.categoryId,
+      userId: this.userId,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

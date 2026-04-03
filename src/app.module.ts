@@ -12,6 +12,8 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { BudgetsModule } from './modules/budgets/budgets.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
+import { SubscriptionTemplatesModule } from './modules/subscription-templates/subscription-templates.module';
+import { DevDataSeeder } from './seeders/dev-data.seeder';
 
 @Module({
   imports: [
@@ -25,9 +27,14 @@ import { SubscriptionsModule } from './modules/subscriptions/subscriptions.modul
     TransactionsModule,
     BudgetsModule,
     SubscriptionsModule,
+    SubscriptionTemplatesModule,
   ],
   providers: [
-    { provide: APP_PIPE, useValue: new ValidationPipe({ whitelist: true, transform: true }) },
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({ whitelist: true, transform: true }),
+    },
+    DevDataSeeder,
   ],
 })
 export class AppModule {}

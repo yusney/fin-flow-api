@@ -4,6 +4,11 @@ import { Budget } from '../../domain/entities/budget.entity';
 export const BudgetSchema = new EntitySchema<Budget>({
   class: Budget,
   tableName: 'budgets',
+  indexes: [
+    // FK indexes for better JOIN performance (PostgreSQL doesn't auto-index FK columns)
+    { properties: ['userId'], name: 'idx_budgets_user_id' },
+    { properties: ['categoryId'], name: 'idx_budgets_category_id' },
+  ],
   properties: {
     id: { type: 'uuid', primary: true },
     limitAmount: {
@@ -27,7 +32,5 @@ export const BudgetSchema = new EntitySchema<Budget>({
       onUpdate: () => new Date(),
     },
   },
-  uniques: [
-    { properties: ['userId', 'categoryId', 'month', 'year'] },
-  ],
+  uniques: [{ properties: ['userId', 'categoryId', 'month', 'year'] }],
 });
