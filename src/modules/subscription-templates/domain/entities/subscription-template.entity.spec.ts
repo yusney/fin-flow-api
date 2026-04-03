@@ -1,11 +1,10 @@
 import { ValidationException } from '../../../../shared/domain/exceptions';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 import { TemplateCategory } from '../enums/template-category.enum';
-import { TemplateOwnership } from '../enums/template-ownership.enum';
 import { SubscriptionTemplate } from './subscription-template.entity';
 
 describe('SubscriptionTemplate Entity', () => {
-  const validGlobalProps = {
+  const validProps = {
     name: 'Netflix',
     description: 'Streaming service',
     iconUrl: 'https://example.com/icon.png',
@@ -13,25 +12,11 @@ describe('SubscriptionTemplate Entity', () => {
     defaultAmount: 15.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
-  };
-
-  const validUserProps = {
-    name: 'My Custom Sub',
-    description: 'Personal subscription',
-    iconUrl: null,
-    serviceUrl: null,
-    defaultAmount: 9.99,
-    defaultFrequency: BillingFrequency.MONTHLY,
-    category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.USER,
-    userId: 'user-uuid-123',
   };
 
   describe('create', () => {
-    it('should create a valid GLOBAL template with userId=null and serviceUrl required', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
+    it('should create a valid template', () => {
+      const template = SubscriptionTemplate.create(validProps);
 
       expect(template.name).toBe('Netflix');
       expect(template.description).toBe('Streaming service');
@@ -40,43 +25,40 @@ describe('SubscriptionTemplate Entity', () => {
       expect(template.defaultAmount).toBe(15.99);
       expect(template.defaultFrequency).toBe(BillingFrequency.MONTHLY);
       expect(template.category).toBe(TemplateCategory.STREAMING);
-      expect(template.ownership).toBe(TemplateOwnership.GLOBAL);
-      expect(template.userId).toBeNull();
       expect(template.id).toBeDefined();
       expect(template.id).toMatch(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
       );
     });
 
-    it('should create a valid USER template with userId required and serviceUrl optional', () => {
-      const template = SubscriptionTemplate.create(validUserProps);
-
-      expect(template.name).toBe('My Custom Sub');
-      expect(template.ownership).toBe(TemplateOwnership.USER);
-      expect(template.userId).toBe('user-uuid-123');
+    it('should create a template with null serviceUrl', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        serviceUrl: null,
+      });
       expect(template.serviceUrl).toBeNull();
     });
 
     it('should throw ValidationException when name is empty', () => {
       expect(() =>
-        SubscriptionTemplate.create({ ...validGlobalProps, name: '' }),
+        SubscriptionTemplate.create({ ...validProps, name: '' }),
       ).toThrow(ValidationException);
       expect(() =>
-        SubscriptionTemplate.create({ ...validGlobalProps, name: '   ' }),
+        SubscriptionTemplate.create({ ...validProps, name: '   ' }),
       ).toThrow(ValidationException);
     });
 
     it('should throw ValidationException when name exceeds 100 characters', () => {
       const longName = 'a'.repeat(101);
       expect(() =>
-        SubscriptionTemplate.create({ ...validGlobalProps, name: longName }),
+        SubscriptionTemplate.create({ ...validProps, name: longName }),
       ).toThrow(ValidationException);
     });
 
     it('should accept a name with exactly 100 characters', () => {
       const maxName = 'a'.repeat(100);
       const template = SubscriptionTemplate.create({
-        ...validGlobalProps,
+        ...validProps,
         name: maxName,
       });
       expect(template.name).toBe(maxName);
@@ -84,7 +66,7 @@ describe('SubscriptionTemplate Entity', () => {
 
     it('should trim the name whitespace', () => {
       const template = SubscriptionTemplate.create({
-        ...validGlobalProps,
+        ...validProps,
         name: '  Netflix  ',
       });
       expect(template.name).toBe('Netflix');
@@ -92,55 +74,17 @@ describe('SubscriptionTemplate Entity', () => {
 
     it('should throw ValidationException when defaultAmount is not positive', () => {
       expect(() =>
-        SubscriptionTemplate.create({ ...validGlobalProps, defaultAmount: 0 }),
+        SubscriptionTemplate.create({ ...validProps, defaultAmount: 0 }),
       ).toThrow(ValidationException);
       expect(() =>
-        SubscriptionTemplate.create({ ...validGlobalProps, defaultAmount: -5 }),
+        SubscriptionTemplate.create({ ...validProps, defaultAmount: -5 }),
       ).toThrow(ValidationException);
-    });
-
-    it('should throw ValidationException when GLOBAL template has non-null userId', () => {
-      expect(() =>
-        SubscriptionTemplate.create({
-          ...validGlobalProps,
-          ownership: TemplateOwnership.GLOBAL,
-          userId: 'user-uuid-123',
-        }),
-      ).toThrow(ValidationException);
-    });
-
-    it('should throw ValidationException when USER template has null userId', () => {
-      expect(() =>
-        SubscriptionTemplate.create({
-          ...validUserProps,
-          ownership: TemplateOwnership.USER,
-          userId: null,
-        }),
-      ).toThrow(ValidationException);
-    });
-
-    it('should throw ValidationException when GLOBAL template has null serviceUrl', () => {
-      expect(() =>
-        SubscriptionTemplate.create({
-          ...validGlobalProps,
-          ownership: TemplateOwnership.GLOBAL,
-          serviceUrl: null,
-        }),
-      ).toThrow(ValidationException);
-    });
-
-    it('should accept USER template with null serviceUrl', () => {
-      const template = SubscriptionTemplate.create({
-        ...validUserProps,
-        serviceUrl: null,
-      });
-      expect(template.serviceUrl).toBeNull();
     });
 
     it('should throw ValidationException for invalid category', () => {
       expect(() =>
         SubscriptionTemplate.create({
-          ...validGlobalProps,
+          ...validProps,
           category: 'INVALID' as any,
         }),
       ).toThrow(ValidationException);
@@ -149,7 +93,7 @@ describe('SubscriptionTemplate Entity', () => {
     it('should throw ValidationException for invalid billing frequency', () => {
       expect(() =>
         SubscriptionTemplate.create({
-          ...validGlobalProps,
+          ...validProps,
           defaultFrequency: 'WEEKLY' as any,
         }),
       ).toThrow(ValidationException);
@@ -158,7 +102,7 @@ describe('SubscriptionTemplate Entity', () => {
 
   describe('update', () => {
     it('should update fields with partial props', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
+      const template = SubscriptionTemplate.create(validProps);
       const originalUpdatedAt = template.updatedAt;
 
       template.update({
@@ -175,7 +119,7 @@ describe('SubscriptionTemplate Entity', () => {
     });
 
     it('should validate name on update', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
+      const template = SubscriptionTemplate.create(validProps);
 
       expect(() => template.update({ name: '' })).toThrow(ValidationException);
       expect(() => template.update({ name: 'a'.repeat(101) })).toThrow(
@@ -184,7 +128,7 @@ describe('SubscriptionTemplate Entity', () => {
     });
 
     it('should validate defaultAmount on update', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
+      const template = SubscriptionTemplate.create(validProps);
 
       expect(() => template.update({ defaultAmount: -1 })).toThrow(
         ValidationException,
@@ -195,38 +139,22 @@ describe('SubscriptionTemplate Entity', () => {
     });
 
     it('should trim name on update', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
+      const template = SubscriptionTemplate.create(validProps);
       template.update({ name: '  Updated Name  ' });
       expect(template.name).toBe('Updated Name');
     });
   });
 
-  describe('isOwnedBy', () => {
-    it('should return true when userId matches', () => {
-      const template = SubscriptionTemplate.create(validUserProps);
-      expect(template.isOwnedBy('user-uuid-123')).toBe(true);
-    });
+  describe('toJSON', () => {
+    it('should not include ownership or userId', () => {
+      const template = SubscriptionTemplate.create(validProps);
+      const json = template.toJSON();
 
-    it('should return false when userId does not match', () => {
-      const template = SubscriptionTemplate.create(validUserProps);
-      expect(template.isOwnedBy('other-user')).toBe(false);
-    });
-
-    it('should return false for GLOBAL templates', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
-      expect(template.isOwnedBy('user-uuid-123')).toBe(false);
-    });
-  });
-
-  describe('isGlobal', () => {
-    it('should return true for GLOBAL templates', () => {
-      const template = SubscriptionTemplate.create(validGlobalProps);
-      expect(template.isGlobal()).toBe(true);
-    });
-
-    it('should return false for USER templates', () => {
-      const template = SubscriptionTemplate.create(validUserProps);
-      expect(template.isGlobal()).toBe(false);
+      expect(json).not.toHaveProperty('ownership');
+      expect(json).not.toHaveProperty('userId');
+      expect(json).toHaveProperty('id');
+      expect(json).toHaveProperty('name');
+      expect(json).toHaveProperty('category');
     });
   });
 });

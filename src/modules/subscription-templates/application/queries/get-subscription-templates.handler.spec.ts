@@ -2,7 +2,6 @@ import { GetSubscriptionTemplatesHandler } from './get-subscription-templates.ha
 import { GetSubscriptionTemplatesQuery } from './get-subscription-templates.query';
 import { ISubscriptionTemplateRepository } from '../../domain/ports/subscription-template.repository';
 import { SubscriptionTemplate } from '../../domain/entities/subscription-template.entity';
-import { TemplateOwnership } from '../../domain/enums/template-ownership.enum';
 import { TemplateCategory } from '../../domain/enums/template-category.enum';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 
@@ -13,16 +12,14 @@ describe('GetSubscriptionTemplatesHandler', () => {
   beforeEach(() => {
     repository = {
       findById: jest.fn(),
-      findVisibleByUser: jest.fn(),
-      findByNameAndOwnership: jest.fn(),
+      findAll: jest.fn(),
+      findByName: jest.fn(),
       save: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
     };
     handler = new GetSubscriptionTemplatesHandler(repository);
   });
 
-  it('should return all visible templates for a user without category filter', async () => {
+  it('should return all templates without category filter', async () => {
     const templates = [
       SubscriptionTemplate.create({
         name: 'Netflix',
@@ -32,32 +29,25 @@ describe('GetSubscriptionTemplatesHandler', () => {
         defaultAmount: 15.99,
         defaultFrequency: BillingFrequency.MONTHLY,
         category: TemplateCategory.STREAMING,
-        ownership: TemplateOwnership.GLOBAL,
-        userId: null,
       }),
       SubscriptionTemplate.create({
-        name: 'My Custom',
+        name: 'Spotify',
         description: null,
         iconUrl: null,
-        serviceUrl: null,
+        serviceUrl: 'https://spotify.com',
         defaultAmount: 9.99,
         defaultFrequency: BillingFrequency.MONTHLY,
-        category: TemplateCategory.OTHER,
-        ownership: TemplateOwnership.USER,
-        userId: 'user-uuid',
+        category: TemplateCategory.MUSIC,
       }),
     ];
-    repository.findVisibleByUser.mockResolvedValue(templates);
+    repository.findAll.mockResolvedValue(templates);
 
-    const query = new GetSubscriptionTemplatesQuery('user-uuid');
+    const query = new GetSubscriptionTemplatesQuery();
     const result = await handler.execute(query);
 
     expect(result).toHaveLength(2);
     expect(result).toEqual(templates);
-    expect(repository.findVisibleByUser).toHaveBeenCalledWith(
-      'user-uuid',
-      undefined,
-    );
+    expect(repository.findAll).toHaveBeenCalledWith(undefined);
   });
 
   it('should return templates filtered by category', async () => {
@@ -70,32 +60,25 @@ describe('GetSubscriptionTemplatesHandler', () => {
         defaultAmount: 15.99,
         defaultFrequency: BillingFrequency.MONTHLY,
         category: TemplateCategory.STREAMING,
-        ownership: TemplateOwnership.GLOBAL,
-        userId: null,
       }),
     ];
-    repository.findVisibleByUser.mockResolvedValue(templates);
+    repository.findAll.mockResolvedValue(templates);
 
-    const query = new GetSubscriptionTemplatesQuery(
-      'user-uuid',
-      TemplateCategory.STREAMING,
-    );
+    const query = new GetSubscriptionTemplatesQuery(TemplateCategory.STREAMING);
     const result = await handler.execute(query);
 
     expect(result).toHaveLength(1);
     expect(result).toEqual(templates);
-    expect(repository.findVisibleByUser).toHaveBeenCalledWith(
-      'user-uuid',
-      TemplateCategory.STREAMING,
-    );
+    expect(repository.findAll).toHaveBeenCalledWith(TemplateCategory.STREAMING);
   });
 
-  it('should return empty array when no templates are visible', async () => {
-    repository.findVisibleByUser.mockResolvedValue([]);
+  it('should return empty array when no templates exist', async () => {
+    repository.findAll.mockResolvedValue([]);
 
-    const query = new GetSubscriptionTemplatesQuery('user-uuid');
+    const query = new GetSubscriptionTemplatesQuery();
     const result = await handler.execute(query);
 
     expect(result).toEqual([]);
+    expect(repository.findAll).toHaveBeenCalledWith(undefined);
   });
 });

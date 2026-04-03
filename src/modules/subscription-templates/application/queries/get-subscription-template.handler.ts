@@ -7,9 +7,7 @@ import { SubscriptionTemplate } from '../../domain/entities/subscription-templat
 import { NotFoundException } from '../../../../shared/domain/exceptions';
 
 @QueryHandler(GetSubscriptionTemplateQuery)
-export class GetSubscriptionTemplateHandler
-  implements IQueryHandler<GetSubscriptionTemplateQuery>
-{
+export class GetSubscriptionTemplateHandler implements IQueryHandler<GetSubscriptionTemplateQuery> {
   constructor(
     @Inject(SUBSCRIPTION_TEMPLATE_REPOSITORY)
     private readonly subscriptionTemplateRepository: ISubscriptionTemplateRepository,
@@ -23,10 +21,6 @@ export class GetSubscriptionTemplateHandler
     );
 
     if (!template) {
-      throw new NotFoundException('Subscription template not found');
-    }
-
-    if (!template.isGlobal() && !template.isOwnedBy(query.userId)) {
       throw new NotFoundException('Subscription template not found');
     }
 

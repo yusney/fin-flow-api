@@ -6,13 +6,6 @@ export const SubscriptionTemplateSchema =
     class: SubscriptionTemplate,
     tableName: 'subscription_templates',
     indexes: [
-      // FK index for user lookups
-      { properties: ['userId'], name: 'idx_subscription_templates_user_id' },
-      // Indexes for filtering by ownership and category
-      {
-        properties: ['ownership'],
-        name: 'idx_subscription_templates_ownership',
-      },
       {
         properties: ['category'],
         name: 'idx_subscription_templates_template_category',
@@ -46,8 +39,6 @@ export const SubscriptionTemplateSchema =
         default: 'MONTHLY',
       },
       category: { type: 'string', fieldName: 'template_category', length: 30 },
-      ownership: { type: 'string', length: 10 },
-      userId: { type: 'uuid', fieldName: 'user_id', nullable: true },
       createdAt: {
         type: 'datetime',
         fieldName: 'created_at',
@@ -61,10 +52,9 @@ export const SubscriptionTemplateSchema =
       },
     },
     uniques: [
-      // Unique constraint: same template name per ownership level (global or user)
       {
-        properties: ['name', 'ownership', 'userId'],
-        name: 'uq_subscription_templates_name_ownership_user',
+        properties: ['name'],
+        name: 'uq_subscription_templates_name',
       },
     ],
   });

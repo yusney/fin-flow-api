@@ -6,9 +6,7 @@ import type { ISubscriptionTemplateRepository } from '../../domain/ports/subscri
 import { SubscriptionTemplate } from '../../domain/entities/subscription-template.entity';
 
 @QueryHandler(GetSubscriptionTemplatesQuery)
-export class GetSubscriptionTemplatesHandler
-  implements IQueryHandler<GetSubscriptionTemplatesQuery>
-{
+export class GetSubscriptionTemplatesHandler implements IQueryHandler<GetSubscriptionTemplatesQuery> {
   constructor(
     @Inject(SUBSCRIPTION_TEMPLATE_REPOSITORY)
     private readonly subscriptionTemplateRepository: ISubscriptionTemplateRepository,
@@ -17,9 +15,6 @@ export class GetSubscriptionTemplatesHandler
   async execute(
     query: GetSubscriptionTemplatesQuery,
   ): Promise<SubscriptionTemplate[]> {
-    return this.subscriptionTemplateRepository.findVisibleByUser(
-      query.userId,
-      query.category,
-    );
+    return this.subscriptionTemplateRepository.findAll(query.category);
   }
 }

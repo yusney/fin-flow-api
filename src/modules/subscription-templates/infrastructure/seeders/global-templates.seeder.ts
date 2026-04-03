@@ -3,7 +3,6 @@ import { Inject } from '@nestjs/common';
 import { SUBSCRIPTION_TEMPLATE_REPOSITORY } from '../../domain/ports/subscription-template.repository';
 import type { ISubscriptionTemplateRepository } from '../../domain/ports/subscription-template.repository';
 import { SubscriptionTemplate } from '../../domain/entities/subscription-template.entity';
-import { TemplateOwnership } from '../../domain/enums/template-ownership.enum';
 import { GLOBAL_TEMPLATES } from './seed-data';
 
 @Injectable()
@@ -24,11 +23,9 @@ export class GlobalTemplatesSeeder implements OnModuleInit {
     let skipped = 0;
 
     for (const templateData of GLOBAL_TEMPLATES) {
-      const existing =
-        await this.subscriptionTemplateRepository.findByNameAndOwnership(
-          templateData.name,
-          TemplateOwnership.GLOBAL,
-        );
+      const existing = await this.subscriptionTemplateRepository.findByName(
+        templateData.name,
+      );
 
       if (existing) {
         skipped++;
@@ -43,8 +40,6 @@ export class GlobalTemplatesSeeder implements OnModuleInit {
         defaultAmount: templateData.defaultAmount,
         defaultFrequency: templateData.defaultFrequency,
         category: templateData.category,
-        ownership: TemplateOwnership.GLOBAL,
-        userId: null,
       });
 
       await this.subscriptionTemplateRepository.save(template);

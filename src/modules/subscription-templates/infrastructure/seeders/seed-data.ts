@@ -1,6 +1,5 @@
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 import { TemplateCategory } from '../../domain/enums/template-category.enum';
-import { TemplateOwnership } from '../../domain/enums/template-ownership.enum';
 
 export interface SeedTemplate {
   name: string;
@@ -10,8 +9,6 @@ export interface SeedTemplate {
   defaultAmount: number;
   defaultFrequency: BillingFrequency;
   category: TemplateCategory;
-  ownership: TemplateOwnership;
-  userId: null;
 }
 
 export const GLOBAL_TEMPLATES: SeedTemplate[] = [
@@ -24,8 +21,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 15.49,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Disney+',
@@ -36,8 +31,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 13.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'HBO Max',
@@ -48,8 +41,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 15.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Amazon Prime Video',
@@ -59,8 +50,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 8.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Hulu',
@@ -70,8 +59,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 7.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Apple TV+',
@@ -81,8 +68,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Paramount+',
@@ -93,8 +78,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 5.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Peacock',
@@ -105,8 +88,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 5.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.STREAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── MUSIC (6) ────────────────────────────────────────────────────────────────
@@ -118,8 +99,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Apple Music',
@@ -129,8 +108,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'YouTube Music',
@@ -140,8 +117,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Amazon Music Unlimited',
@@ -151,8 +126,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Tidal',
@@ -162,8 +135,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Deezer',
@@ -173,8 +144,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.MUSIC,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── GAMING (6) ───────────────────────────────────────────────────────────────
@@ -186,8 +155,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'PlayStation Plus',
@@ -197,8 +164,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 59.99,
     defaultFrequency: BillingFrequency.ANNUAL,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Nintendo Switch Online',
@@ -209,8 +174,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 19.99,
     defaultFrequency: BillingFrequency.ANNUAL,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'EA Play',
@@ -220,8 +183,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Ubisoft+',
@@ -231,8 +192,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 17.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Humble Bundle Monthly',
@@ -242,8 +201,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.GAMING,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── CLOUD STORAGE (6) ────────────────────────────────────────────────────────
@@ -255,8 +212,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'iCloud+',
@@ -266,8 +221,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Dropbox Plus',
@@ -277,8 +230,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 11.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'OneDrive',
@@ -288,8 +239,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 1.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Box Personal',
@@ -299,8 +248,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'pCloud Premium',
@@ -310,8 +257,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.CLOUD_STORAGE,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── PRODUCTIVITY (6) ─────────────────────────────────────────────────────────
@@ -324,8 +269,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Notion',
@@ -335,8 +278,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Evernote Personal',
@@ -346,8 +287,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Todoist Pro',
@@ -358,8 +297,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 4.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Grammarly Premium',
@@ -369,8 +306,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Slack Pro',
@@ -380,8 +315,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 7.25,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.PRODUCTIVITY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── NEWS & MEDIA (6) ─────────────────────────────────────────────────────────
@@ -393,8 +326,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 17.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'The Washington Post',
@@ -404,8 +335,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'The Wall Street Journal',
@@ -415,8 +344,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 24.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'The Economist',
@@ -426,8 +353,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 22.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Medium',
@@ -437,8 +362,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 5.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Substack',
@@ -448,8 +371,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 5.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.NEWS_MEDIA,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── FITNESS & HEALTH (6) ─────────────────────────────────────────────────────
@@ -461,8 +382,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 44.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Calm',
@@ -472,8 +391,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 69.99,
     defaultFrequency: BillingFrequency.ANNUAL,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Headspace',
@@ -483,8 +400,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'MyFitnessPal Premium',
@@ -494,8 +409,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Strava Summit',
@@ -505,8 +418,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 7.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Noom',
@@ -516,8 +427,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 59.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FITNESS_HEALTH,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── EDUCATION (6) ────────────────────────────────────────────────────────────
@@ -529,8 +438,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 6.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Coursera Plus',
@@ -540,8 +447,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 59.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'LinkedIn Learning',
@@ -551,8 +456,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 29.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Udemy Business',
@@ -562,8 +465,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 30.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'MasterClass',
@@ -573,8 +474,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Brilliant',
@@ -585,8 +484,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 24.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.EDUCATION,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── FOOD DELIVERY (6) ────────────────────────────────────────────────────────
@@ -598,8 +495,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Uber One',
@@ -610,8 +505,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Grubhub+',
@@ -621,8 +514,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Instacart+',
@@ -632,8 +523,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'HelloFresh',
@@ -644,8 +533,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 79.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Factor Meals',
@@ -655,8 +542,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 120.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.FOOD_DELIVERY,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── SECURITY & VPN (6) ───────────────────────────────────────────────────────
@@ -668,8 +553,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 11.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'ExpressVPN',
@@ -679,8 +562,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.95,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Surfshark',
@@ -690,8 +571,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 3.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: '1Password',
@@ -701,8 +580,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'LastPass Premium',
@@ -712,8 +589,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 3.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Dashlane Premium',
@@ -723,8 +598,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.SECURITY_VPN,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 
   // ── OTHER (10) ───────────────────────────────────────────────────────────────
@@ -736,8 +609,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Adobe Creative Cloud',
@@ -748,8 +619,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 54.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'GitHub Copilot',
@@ -759,8 +628,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'ChatGPT Plus',
@@ -771,8 +638,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 20.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Figma Professional',
@@ -782,8 +647,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Canva Pro',
@@ -793,8 +656,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 12.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Zoom Pro',
@@ -805,8 +666,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Shopify Basic',
@@ -816,8 +675,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 29.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Mailchimp Essentials',
@@ -827,8 +684,6 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 13.0,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
   {
     name: 'Twitch Turbo',
@@ -838,7 +693,5 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     defaultAmount: 8.99,
     defaultFrequency: BillingFrequency.MONTHLY,
     category: TemplateCategory.OTHER,
-    ownership: TemplateOwnership.GLOBAL,
-    userId: null,
   },
 ];

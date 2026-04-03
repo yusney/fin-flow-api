@@ -1,116 +1,41 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiTags,
   ApiBearerAuth,
   ApiOperation,
   ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CurrentUser } from '../../../shared/infrastructure/decorators/current-user.decorator';
-import { CreateSubscriptionTemplateDto } from './dtos/create-subscription-template.dto';
-import { UpdateSubscriptionTemplateDto } from './dtos/update-subscription-template.dto';
-import { CreateSubscriptionTemplateCommand } from '../application/commands/create-subscription-template.command';
-import { UpdateSubscriptionTemplateCommand } from '../application/commands/update-subscription-template.command';
-import { DeleteSubscriptionTemplateCommand } from '../application/commands/delete-subscription-template.command';
+import { QueryBus } from '@nestjs/cqrs';
 import { GetSubscriptionTemplatesQuery } from '../application/queries/get-subscription-templates.query';
 import { GetSubscriptionTemplateQuery } from '../application/queries/get-subscription-template.query';
+import { GetSubscriptionPrefillQuery } from '../application/queries/get-subscription-prefill.query';
 import { TemplateCategory } from '../domain/enums/template-category.enum';
+import { PrefillResponseDto } from './dtos/prefill-response.dto';
 
 @ApiTags('Subscription Templates')
 @ApiBearerAuth()
 @Controller('api/subscription-templates')
 export class SubscriptionTemplatesController {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly queryBus: QueryBus) {}
 
   @Get()
   @ApiOperation({ summary: 'List subscription templates' })
   @ApiQuery({ name: 'category', enum: TemplateCategory, required: false })
-  async findAll(
-    @CurrentUser() user: { userId: string },
-    @Query('category') category?: TemplateCategory,
-  ) {
-    return this.queryBus.execute(
-      new GetSubscriptionTemplatesQuery(user.userId, category),
-    );
+  async findAll(@Query('category') category?: TemplateCategory) {
+    return this.queryBus.execute(new GetSubscriptionTemplatesQuery(category));
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a subscription template by id' })
-  async findOne(
-    @Param('id') id: string,
-    @CurrentUser() user: { userId: string },
-  ) {
-    return this.queryBus.execute(
-      new GetSubscriptionTemplateQuery(user.userId, id),
-    );
+  async findOne(@Param('id') id: string) {
+    return this.queryBus.execute(new GetSubscriptionTemplateQuery(id));
   }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Create a subscription template' })
-  async create(
-    @Body() dto: CreateSubscriptionTemplateDto,
-    @CurrentUser() user: { userId: string },
-  ) {
-    return this.commandBus.execute(
-      new CreateSubscriptionTemplateCommand(
-        dto.name,
-        user.userId,
-        dto.category,
-        dto.defaultFrequency,
-        dto.defaultAmount,
-        dto.description ?? null,
-        dto.iconUrl ?? null,
-        dto.serviceUrl ?? null,
-      ),
-    );
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update a subscription template' })
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateSubscriptionTemplateDto,
-    @CurrentUser() user: { userId: string },
-  ) {
-    return this.commandBus.execute(
-      new UpdateSubscriptionTemplateCommand(
-        id,
-        user.userId,
-        dto.name,
-        dto.description,
-        dto.iconUrl,
-        dto.serviceUrl,
-        dto.defaultAmount,
-        dto.defaultFrequency,
-        dto.category,
-      ),
-    );
-  }
-
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete a subscription template' })
-  async remove(
-    @Param('id') id: string,
-    @CurrentUser() user: { userId: string },
-  ) {
-    return this.commandBus.execute(
-      new DeleteSubscriptionTemplateCommand(id, user.userId),
-    );
+  @Get(':id/prefill')
+  @ApiOperation({ summary: 'Get pre-fill data from a subscription template' })
+  @ApiResponse({ status: 200, type: PrefillResponseDto })
+  async prefill(@Param('id') id: string): Promise<PrefillResponseDto> {
+    return this.queryBus.execute(new GetSubscriptionPrefillQuery(id));
   }
 }
