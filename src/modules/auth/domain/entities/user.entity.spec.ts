@@ -57,4 +57,58 @@ describe('User Entity', () => {
       ).toThrow(ValidationException);
     });
   });
+
+  describe('updateName', () => {
+    it('should update the name and set updatedAt', () => {
+      const user = User.create(validProps);
+      const beforeUpdate = user.updatedAt;
+
+      user.updateName('Jane Doe');
+
+      expect(user.name).toBe('Jane Doe');
+      expect(user.updatedAt.getTime()).toBeGreaterThanOrEqual(
+        beforeUpdate.getTime(),
+      );
+    });
+
+    it('should trim the new name', () => {
+      const user = User.create(validProps);
+      user.updateName('  Jane Doe  ');
+      expect(user.name).toBe('Jane Doe');
+    });
+
+    it('should throw ValidationException for empty name', () => {
+      const user = User.create(validProps);
+      expect(() => user.updateName('')).toThrow(ValidationException);
+      expect(() => user.updateName('   ')).toThrow(ValidationException);
+    });
+  });
+
+  describe('updatePassword', () => {
+    it('should update the passwordHash and set updatedAt', () => {
+      const user = User.create(validProps);
+      const beforeUpdate = user.updatedAt;
+
+      user.updatePassword('$2b$10$newhash');
+
+      expect(user.passwordHash).toBe('$2b$10$newhash');
+      expect(user.updatedAt.getTime()).toBeGreaterThanOrEqual(
+        beforeUpdate.getTime(),
+      );
+    });
+  });
+
+  describe('toJSON', () => {
+    it('should return profile without passwordHash', () => {
+      const user = User.create(validProps);
+      const json = user.toJSON();
+
+      expect(json).toHaveProperty('id');
+      expect(json).toHaveProperty('name', 'John Doe');
+      expect(json).toHaveProperty('email', 'john@example.com');
+      expect(json).toHaveProperty('createdAt');
+      expect(json).toHaveProperty('updatedAt');
+      expect(json).not.toHaveProperty('passwordHash');
+    });
+  });
 });

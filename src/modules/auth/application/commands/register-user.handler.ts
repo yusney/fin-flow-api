@@ -5,7 +5,10 @@ import { USER_REPOSITORY } from '../../domain/ports/user.repository';
 import type { IUserRepository } from '../../domain/ports/user.repository';
 import { HASHING_SERVICE } from '../../../../shared/application/ports/hashing.port';
 import type { IHashingService } from '../../../../shared/application/ports/hashing.port';
+import { USER_PREFERENCES_REPOSITORY } from '../../../preferences/domain/ports/user-preferences.repository';
+import type { IUserPreferencesRepository } from '../../../preferences/domain/ports/user-preferences.repository';
 import { User } from '../../domain/entities/user.entity';
+import { UserPreferences } from '../../../preferences/domain/entities/user-preferences.entity';
 import { ConflictException } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(RegisterUserCommand)
@@ -15,6 +18,8 @@ export class RegisterUserHandler
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     @Inject(HASHING_SERVICE) private readonly hashingService: IHashingService,
+    @Inject(USER_PREFERENCES_REPOSITORY)
+    private readonly preferencesRepository: IUserPreferencesRepository,
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<{ id: string }> {
@@ -29,8 +34,12 @@ export class RegisterUserHandler
       email: command.email,
       passwordHash,
     });
+    const prefs = UserPreferences.createDefaults(user.id);
 
-    await this.userRepository.save(user);
+    // persist(user) marks user for insert without flushing.
+    // preferencesRepository.save(prefs) flushes both in a single transaction.
+    this.userRepository.persist(user);
+    await this.preferencesRepository.save(prefs);
 
     return { id: user.id };
   }

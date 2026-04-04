@@ -6,17 +6,13 @@ import type { ISubscriptionRepository } from '../../domain/ports/subscription.re
 import { NotFoundException } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(ToggleSubscriptionCommand)
-export class ToggleSubscriptionHandler
-  implements ICommandHandler<ToggleSubscriptionCommand>
-{
+export class ToggleSubscriptionHandler implements ICommandHandler<ToggleSubscriptionCommand> {
   constructor(
     @Inject(SUBSCRIPTION_REPOSITORY)
     private readonly subscriptionRepository: ISubscriptionRepository,
   ) {}
 
-  async execute(
-    command: ToggleSubscriptionCommand,
-  ): Promise<{ id: string; isActive: boolean }> {
+  async execute(command: ToggleSubscriptionCommand) {
     const subscription = await this.subscriptionRepository.findById(command.id);
 
     if (!subscription || subscription.userId !== command.userId) {
@@ -26,6 +22,6 @@ export class ToggleSubscriptionHandler
     subscription.toggle();
     await this.subscriptionRepository.update(subscription);
 
-    return { id: subscription.id, isActive: subscription.isActive };
+    return subscription.toJSON();
   }
 }

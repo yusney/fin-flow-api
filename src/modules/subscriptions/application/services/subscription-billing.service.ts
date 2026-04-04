@@ -21,14 +21,24 @@ export class SubscriptionBillingService {
     const now = new Date();
     const day = now.getDate();
     const month = now.getMonth(); // 0-based for comparison with Date.getMonth()
-    const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const lastDayOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + 1,
+      0,
+    ).getDate();
     const isLastDayOfMonth = day === lastDayOfMonth;
-    const subscriptions = await this.subscriptionRepo.findActiveDueToday(day, isLastDayOfMonth);
+    const subscriptions = await this.subscriptionRepo.findActiveDueToday(
+      day,
+      isLastDayOfMonth,
+    );
 
     for (const sub of subscriptions) {
       try {
         // Skip annual subscriptions if current month doesn't match start month
-        if (sub.frequency === BillingFrequency.ANNUAL && sub.startDate.getMonth() !== month) {
+        if (
+          sub.frequency === BillingFrequency.ANNUAL &&
+          sub.startDate.getMonth() !== month
+        ) {
           continue;
         }
 
@@ -53,7 +63,7 @@ export class SubscriptionBillingService {
         );
       } catch (error) {
         this.logger.error(
-          `Failed to bill subscription ${sub.id}: ${error.message}`,
+          `Failed to bill subscription ${sub.id}: ${error instanceof Error ? error.message : String(error)}`,
         );
       }
     }

@@ -54,4 +54,17 @@ export class Transaction extends BaseEntity {
       props.id,
     );
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      amount: this.amount,
+      description: this.description,
+      date: this.date,
+      categoryId: this.categoryId,
+      userId: this.userId,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

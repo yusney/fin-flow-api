@@ -4,6 +4,10 @@ import { Category } from '../../domain/entities/category.entity';
 export const CategorySchema = new EntitySchema<Category>({
   class: Category,
   tableName: 'categories',
+  indexes: [
+    // FK index for user lookups
+    { properties: ['userId'], name: 'idx_categories_user_id' },
+  ],
   properties: {
     id: { type: 'uuid', primary: true },
     name: { type: 'string', length: 100 },

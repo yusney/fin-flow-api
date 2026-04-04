@@ -155,6 +155,16 @@
         },
         {
           "columnNames": [
+            "category_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_budgets_category_id",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
             "user_id"
           ],
           "composite": false,
@@ -164,7 +174,26 @@
           "primary": false
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "name": "chk_budgets_limit_amount_positive",
+          "columnName": "limit_amount",
+          "definition": "CHECK ((limit_amount >= (0)::numeric))",
+          "expression": "limit_amount >= 0"
+        },
+        {
+          "name": "chk_budgets_month_valid",
+          "columnName": "month",
+          "definition": "CHECK (((month >= 1) AND (month <= 12)))",
+          "expression": "(month >= 1) AND (month <= 12)"
+        },
+        {
+          "name": "chk_budgets_year_valid",
+          "columnName": "year",
+          "definition": "CHECK (((year >= 2000) AND (year <= 2100)))",
+          "expression": "(year >= 2000) AND (year <= 2100)"
+        }
+      ],
       "foreignKeys": {
         "budgets_category_id_fkey": {
           "columnNames": [
@@ -243,7 +272,10 @@
           "scale": null,
           "default": null,
           "comment": null,
-          "enumItems": []
+          "enumItems": [
+            "expense",
+            "income"
+          ]
         },
         "user_id": {
           "name": "user_id",
@@ -313,7 +345,14 @@
           "primary": false
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "name": "chk_categories_type",
+          "columnName": "type",
+          "definition": "check (\"type\" in ('expense', 'income'))",
+          "expression": "\"type\" in ('expense', 'income')"
+        }
+      ],
       "foreignKeys": {
         "categories_user_id_fkey": {
           "columnNames": [
@@ -329,6 +368,207 @@
           "deleteRule": "no action"
         }
       },
+      "nativeEnums": {},
+      "comment": null
+    },
+    {
+      "name": "subscription_templates",
+      "schema": "public",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 100,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": 500,
+          "precision": null,
+          "scale": null,
+          "default": "null",
+          "comment": null,
+          "enumItems": []
+        },
+        "icon_url": {
+          "name": "icon_url",
+          "type": "varchar(2048)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": 2048,
+          "precision": null,
+          "scale": null,
+          "default": "null",
+          "comment": null,
+          "enumItems": []
+        },
+        "service_url": {
+          "name": "service_url",
+          "type": "varchar(2048)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": 2048,
+          "precision": null,
+          "scale": null,
+          "default": "null",
+          "comment": null,
+          "enumItems": []
+        },
+        "default_amount": {
+          "name": "default_amount",
+          "type": "numeric(12,2)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": 12,
+          "scale": 2,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "default_frequency": {
+          "name": "default_frequency",
+          "type": "varchar(20)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 20,
+          "precision": null,
+          "scale": null,
+          "default": "'MONTHLY'",
+          "comment": null,
+          "enumItems": []
+        },
+        "template_category": {
+          "name": "template_category",
+          "type": "varchar(30)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 30,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": [
+            "STREAMING",
+            "GAMING",
+            "PRODUCTIVITY",
+            "MUSIC",
+            "SECURITY_VPN",
+            "FITNESS_HEALTH",
+            "NEWS_MEDIA",
+            "EDUCATION",
+            "FOOD_DELIVERY",
+            "CLOUD_STORAGE",
+            "OTHER"
+          ]
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": "now()",
+          "comment": null,
+          "enumItems": []
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": "now()",
+          "comment": null,
+          "enumItems": []
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "template_category"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_subscription_templates_template_category",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "subscription_templates_pkey",
+          "unique": true,
+          "primary": true
+        }
+      ],
+      "checks": [
+        {
+          "name": "chk_templates_category",
+          "columnName": "template_category",
+          "definition": "check (\"template_category\" in ('STREAMING', 'GAMING', 'PRODUCTIVITY', 'MUSIC', 'SECURITY_VPN', 'FITNESS_HEALTH', 'NEWS_MEDIA', 'EDUCATION', 'FOOD_DELIVERY', 'CLOUD_STORAGE', 'OTHER'))",
+          "expression": "\"template_category\" in ('STREAMING', 'GAMING', 'PRODUCTIVITY', 'MUSIC', 'SECURITY_VPN', 'FITNESS_HEALTH', 'NEWS_MEDIA', 'EDUCATION', 'FOOD_DELIVERY', 'CLOUD_STORAGE', 'OTHER')"
+        }
+      ],
+      "foreignKeys": {},
       "nativeEnums": {},
       "comment": null
     },
@@ -470,6 +710,110 @@
           "default": "now()",
           "comment": null,
           "enumItems": []
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": "now()",
+          "comment": null,
+          "enumItems": []
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "frequency": {
+          "name": "frequency",
+          "type": "varchar(20)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 20,
+          "precision": null,
+          "scale": null,
+          "default": "'MONTHLY'",
+          "comment": null,
+          "enumItems": [
+            "DAILY",
+            "WEEKLY",
+            "BIWEEKLY",
+            "MONTHLY",
+            "QUARTERLY",
+            "YEARLY"
+          ]
+        },
+        "type": {
+          "name": "type",
+          "type": "varchar(20)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 20,
+          "precision": null,
+          "scale": null,
+          "default": "'GENERAL'",
+          "comment": null,
+          "enumItems": [
+            "GENERAL",
+            "STREAMING",
+            "GAMING",
+            "PRODUCTIVITY",
+            "SECURITY",
+            "DIGITAL_SERVICE"
+          ]
+        },
+        "service_url": {
+          "name": "service_url",
+          "type": "varchar(2048)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": 2048,
+          "precision": null,
+          "scale": null,
+          "default": "null",
+          "comment": null,
+          "enumItems": []
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
         }
       },
       "indexes": [
@@ -480,6 +824,36 @@
           "composite": false,
           "constraint": false,
           "keyName": "idx_subscriptions_billing_day",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
+            "frequency"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_subscriptions_frequency",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
+            "parent_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_subscriptions_parent_id",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
+            "start_date"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_subscriptions_start_date",
           "unique": false,
           "primary": false
         },
@@ -504,7 +878,32 @@
           "primary": true
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "name": "chk_subscriptions_amount_positive",
+          "columnName": "amount",
+          "definition": "CHECK ((amount >= (0)::numeric))",
+          "expression": "amount >= 0"
+        },
+        {
+          "name": "chk_subscriptions_billing_day_valid",
+          "columnName": "billing_day",
+          "definition": "CHECK (((billing_day >= 1) AND (billing_day <= 31)))",
+          "expression": "(billing_day >= 1) AND (billing_day <= 31)"
+        },
+        {
+          "name": "chk_subscriptions_frequency",
+          "columnName": "frequency",
+          "definition": "check (\"frequency\" in ('DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY'))",
+          "expression": "\"frequency\" in ('DAILY', 'WEEKLY', 'BIWEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY')"
+        },
+        {
+          "name": "chk_subscriptions_type",
+          "columnName": "type",
+          "definition": "check (\"type\" in ('GENERAL', 'STREAMING', 'GAMING', 'PRODUCTIVITY', 'SECURITY', 'DIGITAL_SERVICE'))",
+          "expression": "\"type\" in ('GENERAL', 'STREAMING', 'GAMING', 'PRODUCTIVITY', 'SECURITY', 'DIGITAL_SERVICE')"
+        }
+      ],
       "foreignKeys": {
         "subscriptions_category_id_fkey": {
           "columnNames": [
@@ -513,6 +912,19 @@
           "constraintName": "subscriptions_category_id_fkey",
           "localTableName": "public.subscriptions",
           "referencedTableName": "public.categories",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "updateRule": "no action",
+          "deleteRule": "no action"
+        },
+        "subscriptions_parent_id_fkey": {
+          "columnNames": [
+            "parent_id"
+          ],
+          "constraintName": "subscriptions_parent_id_fkey",
+          "localTableName": "public.subscriptions",
+          "referencedTableName": "public.subscriptions",
           "referencedColumnNames": [
             "id"
           ],
@@ -703,7 +1115,14 @@
           "primary": true
         }
       ],
-      "checks": [],
+      "checks": [
+        {
+          "name": "chk_transactions_amount_positive",
+          "columnName": "amount",
+          "definition": "CHECK ((amount >= (0)::numeric))",
+          "expression": "amount >= 0"
+        }
+      ],
       "foreignKeys": {
         "transactions_category_id_fkey": {
           "columnNames": [
@@ -730,6 +1149,227 @@
           ],
           "updateRule": "no action",
           "deleteRule": "no action"
+        }
+      },
+      "nativeEnums": {},
+      "comment": null
+    },
+    {
+      "name": "user_preferences",
+      "schema": "public",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": true,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": true,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": null,
+          "comment": null,
+          "enumItems": []
+        },
+        "currency": {
+          "name": "currency",
+          "type": "varchar(3)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 3,
+          "precision": null,
+          "scale": null,
+          "default": "'USD'",
+          "comment": null,
+          "enumItems": []
+        },
+        "date_format": {
+          "name": "date_format",
+          "type": "varchar(10)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 10,
+          "precision": null,
+          "scale": null,
+          "default": "'MM/DD/YYYY'",
+          "comment": null,
+          "enumItems": []
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(2)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 2,
+          "precision": null,
+          "scale": null,
+          "default": "'en'",
+          "comment": null,
+          "enumItems": []
+        },
+        "email_notifications": {
+          "name": "email_notifications",
+          "type": "bool",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "true",
+          "comment": null,
+          "enumItems": []
+        },
+        "push_notifications": {
+          "name": "push_notifications",
+          "type": "bool",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "false",
+          "comment": null,
+          "enumItems": []
+        },
+        "budget_alerts": {
+          "name": "budget_alerts",
+          "type": "bool",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "true",
+          "comment": null,
+          "enumItems": []
+        },
+        "subscription_reminders": {
+          "name": "subscription_reminders",
+          "type": "bool",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": null,
+          "precision": null,
+          "scale": null,
+          "default": "true",
+          "comment": null,
+          "enumItems": []
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": "now()",
+          "comment": null,
+          "enumItems": []
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(6)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "unique": false,
+          "length": 6,
+          "precision": null,
+          "scale": null,
+          "default": "now()",
+          "comment": null,
+          "enumItems": []
+        }
+      },
+      "indexes": [
+        {
+          "columnNames": [
+            "user_id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "idx_user_preferences_user_id",
+          "unique": false,
+          "primary": false
+        },
+        {
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": false,
+          "keyName": "user_preferences_pkey",
+          "unique": true,
+          "primary": true
+        },
+        {
+          "columnNames": [
+            "user_id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "keyName": "user_preferences_user_id_key",
+          "unique": true,
+          "primary": false
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "user_preferences_user_id_fkey": {
+          "columnNames": [
+            "user_id"
+          ],
+          "constraintName": "user_preferences_user_id_fkey",
+          "localTableName": "public.user_preferences",
+          "referencedTableName": "public.users",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "updateRule": "no action",
+          "deleteRule": "cascade"
         }
       },
       "nativeEnums": {},

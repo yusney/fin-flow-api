@@ -6,15 +6,13 @@ import type { ITransactionRepository } from '../../domain/ports/transaction.repo
 import { NotFoundException } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(UpdateTransactionCommand)
-export class UpdateTransactionHandler
-  implements ICommandHandler<UpdateTransactionCommand>
-{
+export class UpdateTransactionHandler implements ICommandHandler<UpdateTransactionCommand> {
   constructor(
     @Inject(TRANSACTION_REPOSITORY)
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 
-  async execute(command: UpdateTransactionCommand): Promise<void> {
+  async execute(command: UpdateTransactionCommand) {
     const transaction = await this.transactionRepository.findById(command.id);
 
     if (!transaction || transaction.userId !== command.userId) {
@@ -37,5 +35,7 @@ export class UpdateTransactionHandler
     transaction.updatedAt = new Date();
 
     await this.transactionRepository.update(transaction);
+
+    return transaction.toJSON();
   }
 }

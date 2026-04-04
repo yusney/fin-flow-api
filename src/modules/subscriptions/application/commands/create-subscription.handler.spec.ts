@@ -14,6 +14,7 @@ describe('CreateSubscriptionHandler', () => {
       findById: jest.fn(),
       findByUserId: jest.fn(),
       findActiveDueToday: jest.fn(),
+      findHistoryByRootId: jest.fn(),
       save: jest.fn(),
       update: jest.fn(),
     };
@@ -68,19 +69,35 @@ describe('CreateSubscriptionHandler', () => {
     expect(savedSubscription.serviceUrl).toBe('https://spotify.com');
   });
 
-  it('should still return { id } with new fields', async () => {
+  it('should return a plain object with all fields', async () => {
     subscriptionRepository.save.mockResolvedValue(undefined);
 
+    const startDate = new Date('2026-01-01');
     const command = new CreateSubscriptionCommand(
       9.99,
       'Netflix',
       15,
       'category-uuid',
       'user-uuid',
-      new Date('2026-01-01'),
+      startDate,
     );
     const result = await handler.execute(command);
 
-    expect(result).toEqual({ id: expect.any(String) });
+    expect(result).toMatchObject({
+      id: expect.any(String),
+      amount: 9.99,
+      description: 'Netflix',
+      billingDay: 15,
+      categoryId: 'category-uuid',
+      userId: 'user-uuid',
+      isActive: true,
+      startDate,
+      endDate: null,
+      frequency: BillingFrequency.MONTHLY,
+      type: SubscriptionType.GENERAL,
+      serviceUrl: null,
+      createdAt: expect.any(Date),
+      updatedAt: expect.any(Date),
+    });
   });
 });

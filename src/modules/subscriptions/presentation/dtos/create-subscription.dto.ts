@@ -36,27 +36,46 @@ export class CreateSubscriptionDto {
   @IsUUID()
   categoryId: string;
 
-  @ApiProperty({ example: '2026-01-15', description: 'Subscription start date (ISO 8601)' })
+  @ApiProperty({
+    example: '2026-01-15',
+    description: 'Subscription start date (ISO 8601)',
+  })
   @IsDateString()
   startDate: string;
 
-  @ApiPropertyOptional({ example: '2027-01-15', description: 'Subscription end date (ISO 8601)' })
+  @ApiPropertyOptional({
+    example: '2027-01-15',
+    description: 'Subscription end date (ISO 8601)',
+  })
   @IsOptional()
   @IsDateString()
   endDate?: string;
 
-  @ApiPropertyOptional({ enum: BillingFrequency, default: BillingFrequency.MONTHLY })
+  @ApiPropertyOptional({
+    enum: BillingFrequency,
+    default: BillingFrequency.MONTHLY,
+  })
   @IsOptional()
   @IsEnum(BillingFrequency)
   frequency?: BillingFrequency;
 
-  @ApiPropertyOptional({ enum: SubscriptionType, default: SubscriptionType.GENERAL })
+  @ApiPropertyOptional({
+    enum: SubscriptionType,
+    default: SubscriptionType.GENERAL,
+  })
   @IsOptional()
   @IsEnum(SubscriptionType)
   type?: SubscriptionType;
 
-  @ApiPropertyOptional({ example: 'https://netflix.com', description: 'Service URL (required for DIGITAL_SERVICE)' })
-  @ValidateIf((o) => o.type === SubscriptionType.DIGITAL_SERVICE)
-  @IsUrl()
+  @ApiPropertyOptional({
+    example: 'https://netflix.com',
+    description:
+      'Service URL (required for DIGITAL_SERVICE, forbidden for GENERAL)',
+  })
+  @ValidateIf(
+    (o) =>
+      o.type === SubscriptionType.DIGITAL_SERVICE || o.serviceUrl !== undefined,
+  )
+  @IsUrl({}, { message: 'serviceUrl must be a valid URL' })
   serviceUrl?: string;
 }

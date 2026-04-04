@@ -30,15 +30,15 @@ describe('Subscription Entity', () => {
     });
 
     it('should throw ValidationException when amount is zero', () => {
-      expect(() =>
-        Subscription.create({ ...validProps, amount: 0 }),
-      ).toThrow(ValidationException);
+      expect(() => Subscription.create({ ...validProps, amount: 0 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when amount is negative', () => {
-      expect(() =>
-        Subscription.create({ ...validProps, amount: -5 }),
-      ).toThrow(ValidationException);
+      expect(() => Subscription.create({ ...validProps, amount: -5 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when billingDay is less than 1', () => {
@@ -193,6 +193,32 @@ describe('Subscription Entity', () => {
     });
   });
 
+  describe('parentId', () => {
+    it('should default parentId to null when not provided', () => {
+      const subscription = Subscription.create(validProps);
+
+      expect(subscription.parentId).toBeNull();
+    });
+
+    it('should preserve parentId when provided', () => {
+      const subscription = Subscription.create({
+        ...validProps,
+        parentId: 'root-uuid-abc',
+      });
+
+      expect(subscription.parentId).toBe('root-uuid-abc');
+    });
+
+    it('should accept null explicitly as parentId', () => {
+      const subscription = Subscription.create({
+        ...validProps,
+        parentId: null,
+      });
+
+      expect(subscription.parentId).toBeNull();
+    });
+  });
+
   describe('toggle', () => {
     it('should flip isActive from true to false', () => {
       const subscription = Subscription.create(validProps);
@@ -209,6 +235,33 @@ describe('Subscription Entity', () => {
 
       subscription.toggle();
       expect(subscription.isActive).toBe(true);
+    });
+  });
+
+  describe('closeVersion', () => {
+    it('should set endDate and isActive=false', () => {
+      const subscription = Subscription.create(validProps);
+      expect(subscription.isActive).toBe(true);
+      expect(subscription.endDate).toBeNull();
+
+      const closeDate = new Date('2026-06-01');
+      subscription.closeVersion(closeDate);
+
+      expect(subscription.endDate).toEqual(closeDate);
+      expect(subscription.isActive).toBe(false);
+    });
+
+    it('should not modify other fields when closing', () => {
+      const subscription = Subscription.create({
+        ...validProps,
+        amount: 19.99,
+        description: 'Netflix',
+      });
+
+      subscription.closeVersion(new Date('2026-06-01'));
+
+      expect(subscription.amount).toBe(19.99);
+      expect(subscription.description).toBe('Netflix');
     });
   });
 });

@@ -13,13 +13,14 @@ describe('ToggleSubscriptionHandler', () => {
       findById: jest.fn(),
       findByUserId: jest.fn(),
       findActiveDueToday: jest.fn(),
+      findHistoryByRootId: jest.fn(),
       save: jest.fn(),
       update: jest.fn(),
     };
     handler = new ToggleSubscriptionHandler(subscriptionRepository);
   });
 
-  it('should toggle subscription and return { id, isActive }', async () => {
+  it('should toggle subscription and return full plain object', async () => {
     const subscription = Subscription.create({
       amount: 9.99,
       description: 'Netflix',
@@ -35,14 +36,25 @@ describe('ToggleSubscriptionHandler', () => {
     const command = new ToggleSubscriptionCommand(subscription.id, 'user-uuid');
     const result = await handler.execute(command);
 
-    expect(result).toEqual({ id: subscription.id, isActive: false });
+    expect(result).toMatchObject({
+      id: subscription.id,
+      isActive: false,
+      amount: 9.99,
+      description: 'Netflix',
+      billingDay: 15,
+      categoryId: 'category-uuid',
+      userId: 'user-uuid',
+    });
     expect(subscriptionRepository.update).toHaveBeenCalledWith(subscription);
   });
 
   it('should throw NotFoundException when subscription not found', async () => {
     subscriptionRepository.findById.mockResolvedValue(null);
 
-    const command = new ToggleSubscriptionCommand('non-existent-id', 'user-uuid');
+    const command = new ToggleSubscriptionCommand(
+      'non-existent-id',
+      'user-uuid',
+    );
 
     await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
   });

@@ -1,98 +1,231 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# fin-flow-api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**Personal Finance Management API** — NestJS + PostgreSQL + MikroORM v7
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+`fin-flow-api` is a RESTful API for managing personal finances. It allows you to register transactions, categorize expenses/income, define monthly budgets, manage recurring subscriptions, and use a catalog of popular service templates.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Tech Stack
+
+| Layer          | Technology             |
+| -------------- | ---------------------- |
+| Framework      | NestJS                 |
+| ORM            | MikroORM v7            |
+| Database       | PostgreSQL             |
+| Authentication | JWT (@nestjs/passport) |
+| Validation     | class-validator        |
+| Testing        | Jest                   |
+| Patterns       | CQRS + Hexagonal + DDD |
+
+---
+
+## Modules
+
+| Module                     | Description                                |
+| -------------------------- | ------------------------------------------ |
+| **Auth**                   | User registration, login, JWT tokens       |
+| **Categories**             | User-defined expense/income categories     |
+| **Transactions**           | Financial movement records                 |
+| **Budgets**                | Monthly spending limits per category       |
+| **Subscriptions**          | Recurring subscription management          |
+| **Subscription Templates** | Catalog of 72+ pre-built service templates |
+
+---
+
+## Architecture
+
+```
+src/modules/{module-name}/
+├── domain/                    # Pure business logic
+│   ├── entities/              # Models
+│   ├── enums/                # Constants
+│   └── ports/                 # Repository interfaces
+├── application/               # Use cases (CQRS)
+│   ├── commands/              # WRITE: Create, Update, Delete
+│   └── queries/               # READ: GetAll, GetById
+├── infrastructure/            # Concrete implementations
+│   └── persistence/           # MikroORM schemas + repositories
+└── presentation/             # API layer
+    ├── controllers/           # REST endpoints
+    └── dtos/                 # Data Transfer Objects
 ```
 
-## Compile and run the project
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- PostgreSQL 15+
+- npm or pnpm
+
+### Installation
 
 ```bash
-# development
-$ npm run start
+# Clone the repository
+git clone git@github.com:yusney/fin-flow-api.git
+cd fin-flow-api
 
-# watch mode
-$ npm run start:dev
+# Install dependencies
+npm install
 
-# production mode
-$ npm run start:prod
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your database and JWT settings
 ```
 
-## Run tests
+### Environment Variables
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=fin_flow
+DB_USER=postgres
+DB_PASSWORD=postgres
+
+JWT_SECRET=your-secret-here
+JWT_EXPIRATION=7d
+
+NODE_ENV=development
+```
+
+### Database Setup
 
 ```bash
-# unit tests
-$ npm run test
+# Run migrations
+npm run migration:up
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Seed default data (optional)
+npm run seed
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Running the Application
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Development mode (watch)
+npm run start:dev
+
+# Production mode
+npm run build
+npm run start:prod
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### API Documentation
 
-## Resources
+Once running, access Swagger UI at:
 
-Check out a few resources that may come in handy when working with NestJS:
+```
+http://localhost:3000/api/docs
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Base URL
 
-## Support
+```
+http://localhost:3000/api
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## API Endpoints
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Authentication
+
+| Method | Endpoint       | Description       |
+| ------ | -------------- | ----------------- |
+| POST   | /auth/register | Register new user |
+| POST   | /auth/login    | Login and get JWT |
+
+### Categories
+
+| Method | Endpoint        | Description          |
+| ------ | --------------- | -------------------- |
+| GET    | /categories     | List user categories |
+| POST   | /categories     | Create category      |
+| PUT    | /categories/:id | Update category      |
+| DELETE | /categories/:id | Delete category      |
+
+### Transactions
+
+| Method | Endpoint              | Description          |
+| ------ | --------------------- | -------------------- |
+| GET    | /transactions         | List transactions    |
+| POST   | /transactions         | Create transaction   |
+| PUT    | /transactions/:id     | Update transaction   |
+| DELETE | /transactions/:id     | Delete transaction   |
+| GET    | /transactions/summary | Get spending summary |
+
+### Budgets
+
+| Method | Endpoint        | Description               |
+| ------ | --------------- | ------------------------- |
+| GET    | /budgets        | List budgets              |
+| POST   | /budgets        | Create budget             |
+| PUT    | /budgets/:id    | Update budget             |
+| DELETE | /budgets/:id    | Delete budget             |
+| GET    | /budgets/status | Budget vs actual spending |
+
+### Subscriptions
+
+| Method | Endpoint                  | Description         |
+| ------ | ------------------------- | ------------------- |
+| GET    | /subscriptions            | List subscriptions  |
+| POST   | /subscriptions            | Create subscription |
+| PUT    | /subscriptions/:id/toggle | Pause/Active toggle |
+
+### Subscription Templates
+
+| Method | Endpoint                    | Description          |
+| ------ | --------------------------- | -------------------- |
+| GET    | /subscription-templates     | List templates       |
+| GET    | /subscription-templates/:id | Get template by ID   |
+| POST   | /subscription-templates     | Create user template |
+| PATCH  | /subscription-templates/:id | Update user template |
+| DELETE | /subscription-templates/:id | Delete user template |
+
+---
+
+## Testing
+
+```bash
+# Unit tests
+npm test
+
+# Unit tests (watch mode)
+npm run test:watch
+
+# Test coverage
+npm run test:cov
+
+# E2E tests
+npm run test:e2e
+```
+
+---
+
+## Database Scripts
+
+```bash
+# Generate migration
+npm run migration:create
+
+# Run migrations
+npm run migration:up
+
+# Rollback last migration
+npm run migration:down
+
+# Update schema (dev only)
+npm run schema:update
+```
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
