@@ -20,7 +20,25 @@ export class GlobalTemplatesSeeder implements OnModuleInit {
       this.logger.log('GlobalTemplatesSeeder: skipped in test environment');
       return;
     }
-    await this.seed();
+
+    // Allow skipping seeding via environment variable (useful for debugging deployments)
+    if (process.env.SKIP_SEEDING === 'true') {
+      this.logger.log(
+        'GlobalTemplatesSeeder: skipped via SKIP_SEEDING env var',
+      );
+      return;
+    }
+
+    try {
+      await this.seed();
+    } catch (error) {
+      // Log error but don't crash the app - seeding is not critical for app startup
+      // The app can function without global templates, they can be seeded later
+      this.logger.error(
+        `GlobalTemplatesSeeder: failed to seed global templates. ` +
+          `This is non-fatal, the app will continue. Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 
   async seed(): Promise<void> {

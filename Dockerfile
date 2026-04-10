@@ -42,6 +42,10 @@ COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/package.json ./
 
+# Copy entrypoint script
+COPY --chown=nestjs:nodejs docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
 # Switch to non-root user
 USER nestjs
 
@@ -52,5 +56,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" || exit 1
 
-# Start the application
-CMD ["node", "dist/src/main.js"]
+# Run migrations and start the application
+ENTRYPOINT ["./docker-entrypoint.sh"]
