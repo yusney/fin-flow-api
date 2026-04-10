@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+
+# Build output (we build inside Docker)
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Environment files (sensitive data)
+.env
+.env.*
+!.env.example
+
+# Test files
+test
+*.spec.ts
+*.test.ts
+coverage
+jest.config.*
+
+# Documentation
+*.md
+docs
+
+# Docker files (avoid recursive issues)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Misc
+.DS_Store
+*.log
+tmp

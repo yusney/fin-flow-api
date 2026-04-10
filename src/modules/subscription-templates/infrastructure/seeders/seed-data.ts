@@ -11,12 +11,20 @@ export interface SeedTemplate {
   category: TemplateCategory;
 }
 
+const ICON = {
+  // Simple Icons (https://unpkg.com/simple-icons@11.15.0/icons/{slug}.svg)
+  simple: (slug: string) =>
+    `https://unpkg.com/simple-icons@11.15.0/icons/${slug}.svg`,
+  // Iconify API (https://api.iconify.design/{collection}:{icon}.svg)
+  iconify: (icon: string) => `https://api.iconify.design/${icon}.svg`,
+};
+
 export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   // ── STREAMING (8) ───────────────────────────────────────────────────────────
   {
     name: 'Netflix',
     description: 'Video streaming service with movies and TV shows',
-    iconUrl: 'https://logo.clearbit.com/netflix.com',
+    iconUrl: ICON.simple('netflix'),
     serviceUrl: 'https://netflix.com',
     defaultAmount: 15.49,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -26,7 +34,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Disney+',
     description:
       'Streaming service for Disney, Marvel, Star Wars and National Geographic',
-    iconUrl: 'https://logo.clearbit.com/disneyplus.com',
+    iconUrl: ICON.iconify('tabler:brand-disney'),
     serviceUrl: 'https://disneyplus.com',
     defaultAmount: 13.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -36,7 +44,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'HBO Max',
     description:
       'Streaming platform with HBO originals, Warner Bros. films and more',
-    iconUrl: 'https://logo.clearbit.com/max.com',
+    iconUrl: ICON.simple('hbo'),
     serviceUrl: 'https://max.com',
     defaultAmount: 15.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -45,7 +53,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Amazon Prime Video',
     description: 'Video streaming service included with Amazon Prime',
-    iconUrl: 'https://logo.clearbit.com/primevideo.com',
+    iconUrl: ICON.simple('amazonprime'),
     serviceUrl: 'https://primevideo.com',
     defaultAmount: 8.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -54,7 +62,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Hulu',
     description: 'Live and on-demand TV and movie streaming service',
-    iconUrl: 'https://logo.clearbit.com/hulu.com',
+    iconUrl: ICON.iconify('simple-icons:hulu'),
     serviceUrl: 'https://hulu.com',
     defaultAmount: 7.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -63,7 +71,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Apple TV+',
     description: 'Apple original series, movies, and documentaries',
-    iconUrl: 'https://logo.clearbit.com/apple.com',
+    iconUrl: ICON.simple('appletv'),
     serviceUrl: 'https://tv.apple.com',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -73,7 +81,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Paramount+',
     description:
       'Streaming service with CBS, Nickelodeon, MTV, BET and Paramount films',
-    iconUrl: 'https://logo.clearbit.com/paramountplus.com',
+    iconUrl: ICON.simple('paramountplus'),
     serviceUrl: 'https://paramountplus.com',
     defaultAmount: 5.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -83,7 +91,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Peacock',
     description:
       'NBCUniversal streaming service with live sports, news and entertainment',
-    iconUrl: 'https://logo.clearbit.com/peacocktv.com',
+    iconUrl: ICON.iconify('cbi:peacock'),
     serviceUrl: 'https://peacocktv.com',
     defaultAmount: 5.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -94,7 +102,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Spotify',
     description: 'Music, podcast and audiobook streaming platform',
-    iconUrl: 'https://logo.clearbit.com/spotify.com',
+    iconUrl: ICON.simple('spotify'),
     serviceUrl: 'https://spotify.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -103,7 +111,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Apple Music',
     description: 'Music streaming service with 100M+ songs',
-    iconUrl: 'https://logo.clearbit.com/apple.com',
+    iconUrl: ICON.simple('appletv'),
     serviceUrl: 'https://music.apple.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -112,7 +120,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'YouTube Music',
     description: 'Music streaming service from Google with YouTube integration',
-    iconUrl: 'https://logo.clearbit.com/music.youtube.com',
+    iconUrl: ICON.simple('youtubemusic'),
     serviceUrl: 'https://music.youtube.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -121,7 +129,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Amazon Music Unlimited',
     description: 'Full on-demand music streaming service from Amazon',
-    iconUrl: 'https://logo.clearbit.com/amazon.com',
+    iconUrl: ICON.simple('amazon'),
     serviceUrl: 'https://amazon.com/music/unlimited',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -130,7 +138,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Tidal',
     description: 'High-fidelity music and video streaming service',
-    iconUrl: 'https://logo.clearbit.com/tidal.com',
+    iconUrl: ICON.simple('tidal'),
     serviceUrl: 'https://tidal.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -139,7 +147,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Deezer',
     description: 'Music streaming service with 90M+ tracks and podcasts',
-    iconUrl: 'https://logo.clearbit.com/deezer.com',
+    iconUrl: ICON.iconify('simple-icons:deezer'),
     serviceUrl: 'https://deezer.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -150,7 +158,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Xbox Game Pass Ultimate',
     description: 'Access to 100+ Xbox and PC games plus Xbox Live Gold',
-    iconUrl: 'https://logo.clearbit.com/xbox.com',
+    iconUrl: ICON.simple('xbox'),
     serviceUrl: 'https://xbox.com/game-pass',
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -159,7 +167,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'PlayStation Plus',
     description: 'PlayStation online multiplayer and free monthly games',
-    iconUrl: 'https://logo.clearbit.com/playstation.com',
+    iconUrl: ICON.simple('playstation'),
     serviceUrl: 'https://playstation.com/ps-plus',
     defaultAmount: 59.99,
     defaultFrequency: BillingFrequency.ANNUAL,
@@ -169,7 +177,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Nintendo Switch Online',
     description:
       'Online play, cloud saves and classic NES/SNES games for Nintendo Switch',
-    iconUrl: 'https://logo.clearbit.com/nintendo.com',
+    iconUrl: ICON.simple('nintendo'),
     serviceUrl: 'https://nintendo.com/switch/online',
     defaultAmount: 19.99,
     defaultFrequency: BillingFrequency.ANNUAL,
@@ -178,7 +186,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'EA Play',
     description: "Access to EA's library of top games and early trials",
-    iconUrl: 'https://logo.clearbit.com/ea.com',
+    iconUrl: ICON.simple('ea'),
     serviceUrl: 'https://ea.com/ea-play',
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -187,7 +195,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Ubisoft+',
     description: "Access to Ubisoft's full game catalog and new releases",
-    iconUrl: 'https://logo.clearbit.com/ubisoft.com',
+    iconUrl: ICON.simple('ubisoft'),
     serviceUrl: 'https://ubisoft.com/ubisoft-plus',
     defaultAmount: 17.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -196,7 +204,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Humble Bundle Monthly',
     description: 'Monthly bundle of DRM-free games at a discounted price',
-    iconUrl: 'https://logo.clearbit.com/humblebundle.com',
+    iconUrl: ICON.simple('humblebundle'),
     serviceUrl: 'https://humblebundle.com/monthly',
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -207,7 +215,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Google One',
     description: 'Google cloud storage for Drive, Gmail and Photos',
-    iconUrl: 'https://logo.clearbit.com/one.google.com',
+    iconUrl: ICON.iconify('arcticons:googleone'),
     serviceUrl: 'https://one.google.com',
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -216,7 +224,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'iCloud+',
     description: 'Apple iCloud storage and privacy features',
-    iconUrl: 'https://logo.clearbit.com/apple.com',
+    iconUrl: ICON.simple('appletv'),
     serviceUrl: 'https://apple.com/icloud',
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -225,7 +233,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Dropbox Plus',
     description: 'Cloud storage and file synchronization service',
-    iconUrl: 'https://logo.clearbit.com/dropbox.com',
+    iconUrl: ICON.simple('dropbox'),
     serviceUrl: 'https://dropbox.com',
     defaultAmount: 11.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -234,7 +242,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'OneDrive',
     description: 'Microsoft cloud storage integrated with Office 365',
-    iconUrl: 'https://logo.clearbit.com/microsoft.com',
+    iconUrl: ICON.iconify('arcticons:microsoft-365'),
     serviceUrl: 'https://onedrive.live.com',
     defaultAmount: 1.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -243,7 +251,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Box Personal',
     description: 'Secure cloud storage and file sharing for individuals',
-    iconUrl: 'https://logo.clearbit.com/box.com',
+    iconUrl: ICON.simple('box'),
     serviceUrl: 'https://box.com',
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -252,7 +260,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'pCloud Premium',
     description: 'Lifetime or annual cloud storage with end-to-end encryption',
-    iconUrl: 'https://logo.clearbit.com/pcloud.com',
+    iconUrl: ICON.iconify('arcticons:pcloud'),
     serviceUrl: 'https://pcloud.com',
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -264,7 +272,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Microsoft 365',
     description:
       'Office apps, cloud storage and productivity tools from Microsoft',
-    iconUrl: 'https://logo.clearbit.com/microsoft.com',
+    iconUrl: ICON.iconify('arcticons:microsoft-365'),
     serviceUrl: 'https://microsoft.com/microsoft-365',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -273,7 +281,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Notion',
     description: 'All-in-one workspace for notes, tasks, wikis and databases',
-    iconUrl: 'https://logo.clearbit.com/notion.so',
+    iconUrl: ICON.simple('notion'),
     serviceUrl: 'https://notion.so',
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -282,7 +290,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Evernote Personal',
     description: 'Note-taking and organisation app for individuals',
-    iconUrl: 'https://logo.clearbit.com/evernote.com',
+    iconUrl: ICON.simple('evernote'),
     serviceUrl: 'https://evernote.com',
     defaultAmount: 10.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -292,7 +300,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Todoist Pro',
     description:
       'Task manager and to-do list app with project management features',
-    iconUrl: 'https://logo.clearbit.com/todoist.com',
+    iconUrl: ICON.simple('todoist'),
     serviceUrl: 'https://todoist.com',
     defaultAmount: 4.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -301,7 +309,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Grammarly Premium',
     description: 'AI-powered writing assistant for grammar, clarity and style',
-    iconUrl: 'https://logo.clearbit.com/grammarly.com',
+    iconUrl: ICON.simple('grammarly'),
     serviceUrl: 'https://grammarly.com',
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -310,7 +318,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Slack Pro',
     description: 'Team messaging and collaboration platform',
-    iconUrl: 'https://logo.clearbit.com/slack.com',
+    iconUrl: ICON.simple('slack'),
     serviceUrl: 'https://slack.com',
     defaultAmount: 7.25,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -321,7 +329,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'The New York Times',
     description: 'Digital access to NY Times news, cooking and games',
-    iconUrl: 'https://logo.clearbit.com/nytimes.com',
+    iconUrl: ICON.simple('newyorktimes'),
     serviceUrl: 'https://nytimes.com',
     defaultAmount: 17.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -330,7 +338,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'The Washington Post',
     description: 'Digital subscription to The Washington Post',
-    iconUrl: 'https://logo.clearbit.com/washingtonpost.com',
+    iconUrl: ICON.simple('thewashingtonpost'),
     serviceUrl: 'https://washingtonpost.com',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -339,7 +347,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'The Wall Street Journal',
     description: 'Business and financial news from Dow Jones',
-    iconUrl: 'https://logo.clearbit.com/wsj.com',
+    iconUrl: ICON.iconify('arcticons:wsj'),
     serviceUrl: 'https://wsj.com',
     defaultAmount: 24.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -348,7 +356,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'The Economist',
     description: 'Global news and analysis magazine with digital access',
-    iconUrl: 'https://logo.clearbit.com/economist.com',
+    iconUrl: ICON.iconify('arcticons:economist'),
     serviceUrl: 'https://economist.com',
     defaultAmount: 22.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -357,7 +365,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Medium',
     description: 'Online publishing platform for articles and stories',
-    iconUrl: 'https://logo.clearbit.com/medium.com',
+    iconUrl: ICON.simple('medium'),
     serviceUrl: 'https://medium.com',
     defaultAmount: 5.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -366,7 +374,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Substack',
     description: 'Newsletter subscription platform for independent writers',
-    iconUrl: 'https://logo.clearbit.com/substack.com',
+    iconUrl: ICON.simple('substack'),
     serviceUrl: 'https://substack.com',
     defaultAmount: 5.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -377,7 +385,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Peloton',
     description: 'Fitness classes and connected equipment subscription',
-    iconUrl: 'https://logo.clearbit.com/onepeloton.com',
+    iconUrl: ICON.simple('peloton'),
     serviceUrl: 'https://onepeloton.com',
     defaultAmount: 44.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -386,7 +394,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Calm',
     description: 'Meditation, sleep and relaxation app',
-    iconUrl: 'https://logo.clearbit.com/calm.com',
+    iconUrl: ICON.iconify('arcticons:calm'),
     serviceUrl: 'https://calm.com',
     defaultAmount: 69.99,
     defaultFrequency: BillingFrequency.ANNUAL,
@@ -395,7 +403,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Headspace',
     description: 'Mindfulness and meditation app for stress and sleep',
-    iconUrl: 'https://logo.clearbit.com/headspace.com',
+    iconUrl: ICON.simple('headspace'),
     serviceUrl: 'https://headspace.com',
     defaultAmount: 12.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -404,7 +412,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'MyFitnessPal Premium',
     description: 'Calorie tracking, nutrition diary and fitness planning app',
-    iconUrl: 'https://logo.clearbit.com/myfitnesspal.com',
+    iconUrl: ICON.iconify('arcticons:myfitnesspal'),
     serviceUrl: 'https://myfitnesspal.com',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -413,7 +421,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Strava Summit',
     description: 'GPS running and cycling tracking with advanced analytics',
-    iconUrl: 'https://logo.clearbit.com/strava.com',
+    iconUrl: ICON.simple('strava'),
     serviceUrl: 'https://strava.com',
     defaultAmount: 7.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -422,7 +430,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Noom',
     description: 'Weight loss and healthy lifestyle coaching app',
-    iconUrl: 'https://logo.clearbit.com/noom.com',
+    iconUrl: ICON.iconify('mdi:weight-lifter'),
     serviceUrl: 'https://noom.com',
     defaultAmount: 59.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -433,7 +441,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Duolingo Plus',
     description: 'Ad-free language learning with offline access',
-    iconUrl: 'https://logo.clearbit.com/duolingo.com',
+    iconUrl: ICON.simple('duolingo'),
     serviceUrl: 'https://duolingo.com',
     defaultAmount: 6.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -442,7 +450,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Coursera Plus',
     description: 'Unlimited access to 7,000+ courses and certificates',
-    iconUrl: 'https://logo.clearbit.com/coursera.org',
+    iconUrl: ICON.simple('coursera'),
     serviceUrl: 'https://coursera.org',
     defaultAmount: 59.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -451,7 +459,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'LinkedIn Learning',
     description: 'Online learning platform with business and tech courses',
-    iconUrl: 'https://logo.clearbit.com/linkedin.com',
+    iconUrl: ICON.simple('linkedin'),
     serviceUrl: 'https://linkedin.com/learning',
     defaultAmount: 29.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -460,7 +468,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Udemy Business',
     description: "Access to Udemy's top courses for professional development",
-    iconUrl: 'https://logo.clearbit.com/udemy.com',
+    iconUrl: ICON.simple('udemy'),
     serviceUrl: 'https://udemy.com',
     defaultAmount: 30.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -469,7 +477,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'MasterClass',
     description: 'Online classes taught by world-class experts',
-    iconUrl: 'https://logo.clearbit.com/masterclass.com',
+    iconUrl: ICON.iconify('mdi:school'),
     serviceUrl: 'https://masterclass.com',
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -479,7 +487,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Brilliant',
     description:
       'Interactive STEM learning with math, science and computer science',
-    iconUrl: 'https://logo.clearbit.com/brilliant.org',
+    iconUrl: ICON.iconify('arcticons:brilliant'),
     serviceUrl: 'https://brilliant.org',
     defaultAmount: 24.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -490,7 +498,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'DoorDash DashPass',
     description: 'Unlimited free delivery and reduced service fees on DoorDash',
-    iconUrl: 'https://logo.clearbit.com/doordash.com',
+    iconUrl: ICON.simple('doordash'),
     serviceUrl: 'https://doordash.com/dashpass',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -500,7 +508,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Uber One',
     description:
       'Membership for free delivery and discounts on Uber Eats and rides',
-    iconUrl: 'https://logo.clearbit.com/uber.com',
+    iconUrl: ICON.simple('uber'),
     serviceUrl: 'https://uber.com/uber-one',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -509,7 +517,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Grubhub+',
     description: 'Unlimited free delivery and exclusive perks on Grubhub',
-    iconUrl: 'https://logo.clearbit.com/grubhub.com',
+    iconUrl: ICON.simple('grubhub'),
     serviceUrl: 'https://grubhub.com/plus',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -518,7 +526,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Instacart+',
     description: 'Unlimited free grocery delivery from local stores',
-    iconUrl: 'https://logo.clearbit.com/instacart.com',
+    iconUrl: ICON.simple('instacart'),
     serviceUrl: 'https://instacart.com/plus',
     defaultAmount: 9.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -528,7 +536,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'HelloFresh',
     description:
       'Weekly meal kit subscription with fresh ingredients and recipes',
-    iconUrl: 'https://logo.clearbit.com/hellofresh.com',
+    iconUrl: ICON.simple('hellofresh'),
     serviceUrl: 'https://hellofresh.com',
     defaultAmount: 79.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -537,7 +545,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Factor Meals',
     description: 'Fresh, chef-prepared meals delivered weekly to your door',
-    iconUrl: 'https://logo.clearbit.com/factor75.com',
+    iconUrl: ICON.iconify('mdi:silverware'),
     serviceUrl: 'https://factor75.com',
     defaultAmount: 120.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -548,7 +556,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'NordVPN',
     description: 'Fast and secure VPN with servers in 60+ countries',
-    iconUrl: 'https://logo.clearbit.com/nordvpn.com',
+    iconUrl: ICON.simple('nordvpn'),
     serviceUrl: 'https://nordvpn.com',
     defaultAmount: 11.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -557,7 +565,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'ExpressVPN',
     description: 'High-speed VPN with servers in 94 countries',
-    iconUrl: 'https://logo.clearbit.com/expressvpn.com',
+    iconUrl: ICON.simple('expressvpn'),
     serviceUrl: 'https://expressvpn.com',
     defaultAmount: 12.95,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -566,7 +574,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Surfshark',
     description: 'Budget VPN with unlimited simultaneous connections',
-    iconUrl: 'https://logo.clearbit.com/surfshark.com',
+    iconUrl: ICON.iconify('simple-icons:surfshark'),
     serviceUrl: 'https://surfshark.com',
     defaultAmount: 3.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -575,7 +583,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: '1Password',
     description: 'Password manager and digital vault for individuals',
-    iconUrl: 'https://logo.clearbit.com/1password.com',
+    iconUrl: ICON.simple('1password'),
     serviceUrl: 'https://1password.com',
     defaultAmount: 2.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -584,7 +592,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'LastPass Premium',
     description: 'Password manager with secure vault and dark web monitoring',
-    iconUrl: 'https://logo.clearbit.com/lastpass.com',
+    iconUrl: ICON.simple('lastpass'),
     serviceUrl: 'https://lastpass.com',
     defaultAmount: 3.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -593,7 +601,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Dashlane Premium',
     description: 'Password manager with VPN and identity monitoring',
-    iconUrl: 'https://logo.clearbit.com/dashlane.com',
+    iconUrl: ICON.simple('dashlane'),
     serviceUrl: 'https://dashlane.com',
     defaultAmount: 4.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -604,7 +612,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Amazon Prime',
     description: 'Free shipping, Prime Video, Prime Music and more from Amazon',
-    iconUrl: 'https://logo.clearbit.com/amazon.com',
+    iconUrl: ICON.simple('amazon'),
     serviceUrl: 'https://amazon.com/prime',
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -614,7 +622,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Adobe Creative Cloud',
     description:
       'Suite of creative apps including Photoshop, Illustrator and Premiere',
-    iconUrl: 'https://logo.clearbit.com/adobe.com',
+    iconUrl: ICON.simple('adobe'),
     serviceUrl: 'https://adobe.com/creativecloud',
     defaultAmount: 54.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -623,7 +631,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'GitHub Copilot',
     description: 'AI coding assistant for developers in VS Code and JetBrains',
-    iconUrl: 'https://logo.clearbit.com/github.com',
+    iconUrl: ICON.simple('githubcopilot'),
     serviceUrl: 'https://github.com/features/copilot',
     defaultAmount: 10.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -633,7 +641,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'ChatGPT Plus',
     description:
       'Priority access to GPT-4 and advanced AI features from OpenAI',
-    iconUrl: 'https://logo.clearbit.com/openai.com',
+    iconUrl: ICON.simple('openai'),
     serviceUrl: 'https://chat.openai.com',
     defaultAmount: 20.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -642,7 +650,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Figma Professional',
     description: 'Collaborative design tool for UI/UX designers',
-    iconUrl: 'https://logo.clearbit.com/figma.com',
+    iconUrl: ICON.simple('figma'),
     serviceUrl: 'https://figma.com',
     defaultAmount: 12.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -651,7 +659,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Canva Pro',
     description: 'Graphic design platform with premium templates and assets',
-    iconUrl: 'https://logo.clearbit.com/canva.com',
+    iconUrl: ICON.simple('canva'),
     serviceUrl: 'https://canva.com',
     defaultAmount: 12.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -661,7 +669,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
     name: 'Zoom Pro',
     description:
       'Video conferencing with up to 100 participants and 30-hour meetings',
-    iconUrl: 'https://logo.clearbit.com/zoom.us',
+    iconUrl: ICON.simple('zoom'),
     serviceUrl: 'https://zoom.us',
     defaultAmount: 14.99,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -670,7 +678,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Shopify Basic',
     description: 'E-commerce platform for small businesses and online stores',
-    iconUrl: 'https://logo.clearbit.com/shopify.com',
+    iconUrl: ICON.simple('shopify'),
     serviceUrl: 'https://shopify.com',
     defaultAmount: 29.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -679,7 +687,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Mailchimp Essentials',
     description: 'Email marketing platform for businesses and creators',
-    iconUrl: 'https://logo.clearbit.com/mailchimp.com',
+    iconUrl: ICON.simple('mailchimp'),
     serviceUrl: 'https://mailchimp.com',
     defaultAmount: 13.0,
     defaultFrequency: BillingFrequency.MONTHLY,
@@ -688,7 +696,7 @@ export const GLOBAL_TEMPLATES: SeedTemplate[] = [
   {
     name: 'Twitch Turbo',
     description: 'Ad-free viewing and exclusive perks on Twitch',
-    iconUrl: 'https://logo.clearbit.com/twitch.tv',
+    iconUrl: ICON.simple('twitch'),
     serviceUrl: 'https://twitch.tv/turbo',
     defaultAmount: 8.99,
     defaultFrequency: BillingFrequency.MONTHLY,
