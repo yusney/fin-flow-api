@@ -63,9 +63,14 @@ export async function createTestApp(): Promise<INestApplication> {
   await app.init();
 
   const orm = app.get(MikroORM);
-  await orm.schema.create();
+  await orm.schema.refresh();
 
   return app;
+}
+
+export async function clearDatabase(app: INestApplication): Promise<void> {
+  const orm = app.get(MikroORM);
+  await orm.schema.clear();
 }
 
 export function req(app: INestApplication) {
