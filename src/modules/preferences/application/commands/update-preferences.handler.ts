@@ -13,7 +13,9 @@ export class UpdatePreferencesHandler implements ICommandHandler<UpdatePreferenc
     private readonly preferencesRepository: IUserPreferencesRepository,
   ) {}
 
-  async execute(command: UpdatePreferencesCommand): Promise<UserPreferencesJSON> {
+  async execute(
+    command: UpdatePreferencesCommand,
+  ): Promise<UserPreferencesJSON> {
     const prefs = await this.preferencesRepository.findByUserId(command.userId);
     if (!prefs) {
       throw new NotFoundException('Preferences not found');

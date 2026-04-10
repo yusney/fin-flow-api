@@ -6,9 +6,7 @@ import type { ISubscriptionRepository } from '../../domain/ports/subscription.re
 import { Subscription } from '../../domain/entities/subscription.entity';
 
 @QueryHandler(GetSubscriptionsQuery)
-export class GetSubscriptionsHandler
-  implements IQueryHandler<GetSubscriptionsQuery>
-{
+export class GetSubscriptionsHandler implements IQueryHandler<GetSubscriptionsQuery> {
   constructor(
     @Inject(SUBSCRIPTION_REPOSITORY)
     private readonly subscriptionRepository: ISubscriptionRepository,

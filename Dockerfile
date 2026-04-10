@@ -20,6 +20,9 @@ COPY . .
 # Build the application
 RUN pnpm build
 
+# Verify build output exists
+RUN ls -la dist/src/ && test -f dist/src/main.js
+
 # Remove dev dependencies after build
 RUN pnpm prune --prod
 
@@ -50,4 +53,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" || exit 1
 
 # Start the application
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main.js"]

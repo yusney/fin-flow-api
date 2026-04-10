@@ -10,10 +10,26 @@ export const UserPreferencesSchema = new EntitySchema<UserPreferences>({
     currency: { type: 'string', length: 3 },
     dateFormat: { type: 'string', length: 10, fieldName: 'date_format' },
     language: { type: 'string', length: 2 },
-    emailNotifications: { type: 'boolean', fieldName: 'email_notifications', default: true },
-    pushNotifications: { type: 'boolean', fieldName: 'push_notifications', default: false },
-    budgetAlerts: { type: 'boolean', fieldName: 'budget_alerts', default: true },
-    subscriptionReminders: { type: 'boolean', fieldName: 'subscription_reminders', default: true },
+    emailNotifications: {
+      type: 'boolean',
+      fieldName: 'email_notifications',
+      default: true,
+    },
+    pushNotifications: {
+      type: 'boolean',
+      fieldName: 'push_notifications',
+      default: false,
+    },
+    budgetAlerts: {
+      type: 'boolean',
+      fieldName: 'budget_alerts',
+      default: true,
+    },
+    subscriptionReminders: {
+      type: 'boolean',
+      fieldName: 'subscription_reminders',
+      default: true,
+    },
     createdAt: {
       type: 'datetime',
       fieldName: 'created_at',

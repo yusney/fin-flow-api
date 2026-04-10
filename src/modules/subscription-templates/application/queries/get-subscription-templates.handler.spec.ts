@@ -5,6 +5,8 @@ import { SubscriptionTemplate } from '../../domain/entities/subscription-templat
 import { TemplateCategory } from '../../domain/enums/template-category.enum';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 
+const TEST_USER_ID = 'user-uuid-1234';
+
 describe('GetSubscriptionTemplatesHandler', () => {
   let handler: GetSubscriptionTemplatesHandler;
   let repository: jest.Mocked<ISubscriptionTemplateRepository>;
@@ -13,8 +15,11 @@ describe('GetSubscriptionTemplatesHandler', () => {
     repository = {
       findById: jest.fn(),
       findAll: jest.fn(),
+      findAllForUser: jest.fn(),
+      findByIdForUser: jest.fn(),
       findByName: jest.fn(),
       save: jest.fn(),
+      delete: jest.fn(),
     };
     handler = new GetSubscriptionTemplatesHandler(repository);
   });
@@ -40,14 +45,17 @@ describe('GetSubscriptionTemplatesHandler', () => {
         category: TemplateCategory.MUSIC,
       }),
     ];
-    repository.findAll.mockResolvedValue(templates);
+    repository.findAllForUser.mockResolvedValue(templates);
 
-    const query = new GetSubscriptionTemplatesQuery();
+    const query = new GetSubscriptionTemplatesQuery(TEST_USER_ID);
     const result = await handler.execute(query);
 
     expect(result).toHaveLength(2);
     expect(result).toEqual(templates);
-    expect(repository.findAll).toHaveBeenCalledWith(undefined);
+    expect(repository.findAllForUser).toHaveBeenCalledWith(
+      TEST_USER_ID,
+      undefined,
+    );
   });
 
   it('should return templates filtered by category', async () => {
@@ -62,23 +70,32 @@ describe('GetSubscriptionTemplatesHandler', () => {
         category: TemplateCategory.STREAMING,
       }),
     ];
-    repository.findAll.mockResolvedValue(templates);
+    repository.findAllForUser.mockResolvedValue(templates);
 
-    const query = new GetSubscriptionTemplatesQuery(TemplateCategory.STREAMING);
+    const query = new GetSubscriptionTemplatesQuery(
+      TEST_USER_ID,
+      TemplateCategory.STREAMING,
+    );
     const result = await handler.execute(query);
 
     expect(result).toHaveLength(1);
     expect(result).toEqual(templates);
-    expect(repository.findAll).toHaveBeenCalledWith(TemplateCategory.STREAMING);
+    expect(repository.findAllForUser).toHaveBeenCalledWith(
+      TEST_USER_ID,
+      TemplateCategory.STREAMING,
+    );
   });
 
   it('should return empty array when no templates exist', async () => {
-    repository.findAll.mockResolvedValue([]);
+    repository.findAllForUser.mockResolvedValue([]);
 
-    const query = new GetSubscriptionTemplatesQuery();
+    const query = new GetSubscriptionTemplatesQuery(TEST_USER_ID);
     const result = await handler.execute(query);
 
     expect(result).toEqual([]);
-    expect(repository.findAll).toHaveBeenCalledWith(undefined);
+    expect(repository.findAllForUser).toHaveBeenCalledWith(
+      TEST_USER_ID,
+      undefined,
+    );
   });
 });

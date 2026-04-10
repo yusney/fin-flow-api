@@ -23,7 +23,9 @@ describe('GetPreferencesHandler', () => {
     const result = await handler.execute(new GetPreferencesQuery('user-uuid'));
 
     expect(result).toEqual(prefs.toJSON());
-    expect(preferencesRepository.findByUserId).toHaveBeenCalledWith('user-uuid');
+    expect(preferencesRepository.findByUserId).toHaveBeenCalledWith(
+      'user-uuid',
+    );
   });
 
   it('should throw NotFoundException when preferences do not exist', async () => {

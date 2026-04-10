@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00006AddSubscriptionParentId extends Migration {
-  async up(): Promise<void> {
+  up(): void {
     this.addSql(
       'ALTER TABLE subscriptions ADD COLUMN parent_id UUID NULL REFERENCES subscriptions(id);',
     );
@@ -10,7 +10,7 @@ export class Migration00006AddSubscriptionParentId extends Migration {
     );
   }
 
-  async down(): Promise<void> {
+  down(): void {
     this.addSql('DROP INDEX IF EXISTS idx_subscriptions_parent_id;');
     this.addSql('ALTER TABLE subscriptions DROP COLUMN IF EXISTS parent_id;');
   }

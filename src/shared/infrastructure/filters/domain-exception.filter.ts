@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpStatus,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import {
   DomainException,
   ForbiddenException,
@@ -16,7 +17,7 @@ import {
 export class DomainExceptionFilter implements ExceptionFilter {
   catch(exception: DomainException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
+    const response = ctx.getResponse<Response>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     if (exception instanceof ForbiddenException) status = HttpStatus.FORBIDDEN;

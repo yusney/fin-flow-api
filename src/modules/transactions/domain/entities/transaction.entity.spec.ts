@@ -26,15 +26,15 @@ describe('Transaction Entity', () => {
     });
 
     it('should throw ValidationException when amount is zero', () => {
-      expect(() =>
-        Transaction.create({ ...validProps, amount: 0 }),
-      ).toThrow(ValidationException);
+      expect(() => Transaction.create({ ...validProps, amount: 0 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when amount is negative', () => {
-      expect(() =>
-        Transaction.create({ ...validProps, amount: -10 }),
-      ).toThrow(ValidationException);
+      expect(() => Transaction.create({ ...validProps, amount: -10 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when description is empty', () => {

@@ -6,6 +6,8 @@ import { UpdateTransactionCommand } from '../application/commands/update-transac
 import { DeleteTransactionCommand } from '../application/commands/delete-transaction.command';
 import { GetTransactionsQuery } from '../application/queries/get-transactions.query';
 import { GetSummaryQuery } from '../application/queries/get-summary.query';
+import { CreateTransactionDto } from './dtos/create-transaction.dto';
+import { UpdateTransactionDto } from './dtos/update-transaction.dto';
 
 describe('TransactionsController', () => {
   let controller: TransactionsController;
@@ -69,7 +71,7 @@ describe('TransactionsController', () => {
 
       const user = { userId: 'user-uuid' };
       const now = new Date();
-      const result = await controller.getSummary(user, {});
+      const _result = await controller.getSummary(user, {});
 
       expect(queryBus.execute).toHaveBeenCalledWith(
         new GetSummaryQuery('user-uuid', now.getMonth() + 1, now.getFullYear()),
@@ -82,14 +84,14 @@ describe('TransactionsController', () => {
       const expectedResult = { id: 'tx-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = {
+      const dto: CreateTransactionDto = {
         amount: 100,
         description: 'Grocery',
         date: '2026-03-15',
         categoryId: 'cat-uuid',
       };
       const user = { userId: 'user-uuid' };
-      const result = await controller.create(dto as any, user);
+      const result = await controller.create(dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(
@@ -108,9 +110,9 @@ describe('TransactionsController', () => {
     it('should execute UpdateTransactionCommand with id, dto and userId', async () => {
       commandBus.execute.mockResolvedValue(undefined);
 
-      const dto = { amount: 200, description: 'Updated' };
+      const dto: UpdateTransactionDto = { amount: 200, description: 'Updated' };
       const user = { userId: 'user-uuid' };
-      const result = await controller.update('tx-uuid', dto as any, user);
+      const _result = await controller.update('tx-uuid', dto, user);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new UpdateTransactionCommand(
@@ -130,7 +132,7 @@ describe('TransactionsController', () => {
       commandBus.execute.mockResolvedValue(undefined);
 
       const user = { userId: 'user-uuid' };
-      const result = await controller.delete('tx-uuid', user);
+      const _result = await controller.delete('tx-uuid', user);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new DeleteTransactionCommand('tx-uuid', 'user-uuid'),

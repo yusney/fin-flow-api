@@ -38,7 +38,9 @@ describe('UserPreferences', () => {
       const before = prefs.updatedAt;
       prefs.update({ pushNotifications: true });
 
-      expect(prefs.updatedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
+      expect(prefs.updatedAt.getTime()).toBeGreaterThanOrEqual(
+        before.getTime(),
+      );
     });
 
     it('should be a no-op when called with empty object', () => {

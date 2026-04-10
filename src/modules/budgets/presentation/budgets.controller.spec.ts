@@ -3,6 +3,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { BudgetsController } from './budgets.controller';
 import { CreateBudgetCommand } from '../application/commands/create-budget.command';
 import { GetBudgetStatusQuery } from '../application/queries/get-budget-status.query';
+import { CreateBudgetDto } from './dtos/create-budget.dto';
 
 describe('BudgetsController', () => {
   let controller: BudgetsController;
@@ -34,14 +35,14 @@ describe('BudgetsController', () => {
       const expectedResult = { id: 'budget-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = {
+      const dto: CreateBudgetDto = {
         limitAmount: 5000,
         month: 3,
         year: 2026,
         categoryId: 'cat-uuid',
       };
       const user = { userId: 'user-uuid' };
-      const result = await controller.create(dto as any, user);
+      const result = await controller.create(dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(

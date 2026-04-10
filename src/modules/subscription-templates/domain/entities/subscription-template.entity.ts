@@ -2,6 +2,7 @@ import { BaseEntity } from '../../../../shared/domain/base.entity';
 import { ValidationException } from '../../../../shared/domain/exceptions';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 import { TemplateCategory } from '../enums/template-category.enum';
+import { TemplateOwnership } from '../enums/template-ownership.enum';
 
 export class SubscriptionTemplate extends BaseEntity {
   public name: string;
@@ -11,6 +12,8 @@ export class SubscriptionTemplate extends BaseEntity {
   public defaultAmount: number;
   public defaultFrequency: BillingFrequency;
   public category: TemplateCategory;
+  public ownership: TemplateOwnership;
+  public userId: string | null;
 
   constructor(
     name: string,
@@ -20,6 +23,8 @@ export class SubscriptionTemplate extends BaseEntity {
     defaultAmount: number,
     defaultFrequency: BillingFrequency,
     category: TemplateCategory,
+    ownership: TemplateOwnership,
+    userId: string | null,
     id?: string,
   ) {
     super(id);
@@ -30,16 +35,20 @@ export class SubscriptionTemplate extends BaseEntity {
     this.defaultAmount = defaultAmount;
     this.defaultFrequency = defaultFrequency;
     this.category = category;
+    this.ownership = ownership;
+    this.userId = userId;
   }
 
   static create(props: {
     name: string;
-    description: string | null;
-    iconUrl: string | null;
-    serviceUrl: string | null;
-    defaultAmount: number;
-    defaultFrequency: BillingFrequency;
+    description?: string | null;
+    iconUrl?: string | null;
+    serviceUrl?: string | null;
+    defaultAmount?: number;
+    defaultFrequency?: BillingFrequency;
     category: TemplateCategory;
+    ownership?: TemplateOwnership;
+    userId?: string | null;
     id?: string;
   }): SubscriptionTemplate {
     const trimmedName = props.name?.trim() ?? '';
@@ -52,8 +61,10 @@ export class SubscriptionTemplate extends BaseEntity {
       throw new ValidationException('Name must not exceed 100 characters');
     }
 
-    if (props.defaultAmount <= 0) {
-      throw new ValidationException('Default amount must be a positive number');
+    const defaultAmount = props.defaultAmount ?? 0;
+
+    if (defaultAmount < 0) {
+      throw new ValidationException('Default amount must not be negative');
     }
 
     const validCategories = Object.values(TemplateCategory) as string[];
@@ -61,21 +72,35 @@ export class SubscriptionTemplate extends BaseEntity {
       throw new ValidationException('Invalid template category');
     }
 
+    const defaultFrequency = props.defaultFrequency ?? BillingFrequency.MONTHLY;
     const validFrequencies = Object.values(BillingFrequency) as string[];
-    if (!validFrequencies.includes(props.defaultFrequency)) {
+    if (!validFrequencies.includes(defaultFrequency)) {
       throw new ValidationException('Invalid billing frequency');
     }
 
+    const ownership = props.ownership ?? TemplateOwnership.GLOBAL;
+    const userId = props.userId ?? null;
+
     return new SubscriptionTemplate(
       trimmedName,
-      props.description,
-      props.iconUrl,
-      props.serviceUrl,
-      props.defaultAmount,
-      props.defaultFrequency,
+      props.description ?? null,
+      props.iconUrl ?? null,
+      props.serviceUrl ?? null,
+      defaultAmount,
+      defaultFrequency,
       props.category,
+      ownership,
+      userId,
       props.id,
     );
+  }
+
+  isGlobal(): boolean {
+    return this.ownership === TemplateOwnership.GLOBAL;
+  }
+
+  isOwnedBy(userId: string): boolean {
+    return this.ownership === TemplateOwnership.USER && this.userId === userId;
   }
 
   update(props: {
@@ -102,10 +127,8 @@ export class SubscriptionTemplate extends BaseEntity {
     }
 
     if (props.defaultAmount !== undefined) {
-      if (props.defaultAmount <= 0) {
-        throw new ValidationException(
-          'Default amount must be a positive number',
-        );
+      if (props.defaultAmount < 0) {
+        throw new ValidationException('Default amount must not be negative');
       }
       this.defaultAmount = props.defaultAmount;
     }
@@ -140,9 +163,11 @@ export class SubscriptionTemplate extends BaseEntity {
       description: this.description,
       iconUrl: this.iconUrl,
       serviceUrl: this.serviceUrl,
-      defaultAmount: this.defaultAmount,
+      defaultAmount: Number(this.defaultAmount),
       defaultFrequency: this.defaultFrequency,
-      category: this.category,
+      templateCategory: this.category,
+      ownership: this.ownership,
+      userId: this.userId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

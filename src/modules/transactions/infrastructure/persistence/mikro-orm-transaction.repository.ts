@@ -31,7 +31,7 @@ export class MikroOrmTransactionRepository implements ITransactionRepository {
     await this.em.flush();
   }
 
-  async update(transaction: Transaction): Promise<void> {
+  async update(_transaction: Transaction): Promise<void> {
     await this.em.flush();
   }
 
@@ -49,17 +49,20 @@ export class MikroOrmTransactionRepository implements ITransactionRepository {
     const endDate = new Date(year, month, 1);
 
     const connection = this.em.getConnection();
-    const result = await connection.execute<
-      { total_income: string; total_expense: string }[]
-    >(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const rawResult = await connection.execute(
       `SELECT
         COALESCE(SUM(CASE WHEN c.type = 'income' THEN t.amount ELSE 0 END), 0) as total_income,
         COALESCE(SUM(CASE WHEN c.type = 'expense' THEN t.amount ELSE 0 END), 0) as total_expense
       FROM transactions t
       JOIN categories c ON t.category_id = c.id
       WHERE t.user_id = ? AND t.date >= ? AND t.date < ?`,
-      [userId, startDate.getTime(), endDate.getTime()],
+      [userId, startDate, endDate],
     );
+    const result = rawResult as {
+      total_income: string;
+      total_expense: string;
+    }[];
 
     const row = result[0];
     const totalIncome = Number(row?.total_income ?? 0);

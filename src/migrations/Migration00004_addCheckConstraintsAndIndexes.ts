@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00004_addCheckConstraintsAndIndexes extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     // ============================================
     // SECTION 1: FK Indexes (Performance)
     // ============================================
@@ -96,7 +96,7 @@ export class Migration00004_addCheckConstraintsAndIndexes extends Migration {
     `);
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     // Drop indexes
     this.addSql('DROP INDEX IF EXISTS "idx_budgets_category_id";');
 

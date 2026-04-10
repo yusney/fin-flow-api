@@ -15,6 +15,9 @@ export class GetSubscriptionTemplatesHandler implements IQueryHandler<GetSubscri
   async execute(
     query: GetSubscriptionTemplatesQuery,
   ): Promise<SubscriptionTemplate[]> {
-    return this.subscriptionTemplateRepository.findAll(query.category);
+    return this.subscriptionTemplateRepository.findAllForUser(
+      query.userId,
+      query.category,
+    );
   }
 }

@@ -14,6 +14,7 @@ jest.mock('@nestjs/common', () => ({
 }));
 
 import { NotFoundException } from '@nestjs/common';
+import { EntityManager } from '@mikro-orm/core';
 import { UpdateSubscriptionHandler } from './update-subscription.handler';
 import { UpdateSubscriptionCommand } from './update-subscription.command';
 import { ISubscriptionRepository } from '../../domain/ports/subscription.repository';
@@ -69,7 +70,10 @@ describe('UpdateSubscriptionHandler', () => {
       flush: jest.fn().mockResolvedValue(undefined),
     };
 
-    handler = new UpdateSubscriptionHandler(subscriptionRepository, em as any);
+    handler = new UpdateSubscriptionHandler(
+      subscriptionRepository,
+      em as unknown as EntityManager,
+    );
   });
 
   it('should close current version and create new one with updated amount', async () => {

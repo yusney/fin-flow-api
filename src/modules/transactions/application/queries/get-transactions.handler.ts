@@ -6,9 +6,7 @@ import type { ITransactionRepository } from '../../domain/ports/transaction.repo
 import { Transaction } from '../../domain/entities/transaction.entity';
 
 @QueryHandler(GetTransactionsQuery)
-export class GetTransactionsHandler
-  implements IQueryHandler<GetTransactionsQuery>
-{
+export class GetTransactionsHandler implements IQueryHandler<GetTransactionsQuery> {
   constructor(
     @Inject(TRANSACTION_REPOSITORY)
     private readonly transactionRepository: ITransactionRepository,

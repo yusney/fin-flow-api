@@ -1,5 +1,17 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Patch } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Patch,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CurrentUser } from '../../../shared/infrastructure/decorators/current-user.decorator';
 import { GetPreferencesQuery } from '../application/queries/get-preferences.query';
@@ -20,7 +32,9 @@ export class PreferencesController {
   @ApiOperation({ summary: 'Get current user preferences' })
   @ApiResponse({ status: 200, description: 'User preferences' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getPreferences(@CurrentUser() user: { userId: string }) {
+  async getPreferences(
+    @CurrentUser() user: { userId: string },
+  ): Promise<unknown> {
     return this.queryBus.execute(new GetPreferencesQuery(user.userId));
   }
 
@@ -33,7 +47,9 @@ export class PreferencesController {
   async updatePreferences(
     @CurrentUser() user: { userId: string },
     @Body() dto: UpdatePreferencesDto,
-  ) {
-    return this.commandBus.execute(new UpdatePreferencesCommand(user.userId, dto));
+  ): Promise<unknown> {
+    return this.commandBus.execute(
+      new UpdatePreferencesCommand(user.userId, dto),
+    );
   }
 }

@@ -16,8 +16,9 @@ export class GetSubscriptionTemplateHandler implements IQueryHandler<GetSubscrip
   async execute(
     query: GetSubscriptionTemplateQuery,
   ): Promise<SubscriptionTemplate> {
-    const template = await this.subscriptionTemplateRepository.findById(
+    const template = await this.subscriptionTemplateRepository.findByIdForUser(
       query.templateId,
+      query.userId,
     );
 
     if (!template) {

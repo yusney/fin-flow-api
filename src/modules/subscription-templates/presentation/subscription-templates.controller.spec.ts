@@ -1,16 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { QueryBus } from '@nestjs/cqrs';
+import { QueryBus, CommandBus } from '@nestjs/cqrs';
 import { SubscriptionTemplatesController } from './subscription-templates.controller';
 import { GetSubscriptionTemplatesQuery } from '../application/queries/get-subscription-templates.query';
 import { GetSubscriptionTemplateQuery } from '../application/queries/get-subscription-template.query';
 import { GetSubscriptionPrefillQuery } from '../application/queries/get-subscription-prefill.query';
+import { CreateSubscriptionTemplateCommand } from '../application/commands/create-subscription-template.command';
 import { TemplateCategory } from '../domain/enums/template-category.enum';
 import { BillingFrequency } from '../../subscriptions/domain/enums/billing-frequency.enum';
 import { SubscriptionType } from '../../subscriptions/domain/enums/subscription-type.enum';
+import { CreateSubscriptionTemplateDto } from './dtos/create-subscription-template.dto';
+
+const MOCK_USER = { userId: 'user-uuid-1234', email: 'test@example.com' };
 
 describe('SubscriptionTemplatesController', () => {
   let controller: SubscriptionTemplatesController;
   let queryBus: jest.Mocked<QueryBus>;
+  let commandBus: jest.Mocked<CommandBus>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,6 +25,10 @@ describe('SubscriptionTemplatesController', () => {
           provide: QueryBus,
           useValue: { execute: jest.fn() },
         },
+        {
+          provide: CommandBus,
+          useValue: { execute: jest.fn() },
+        },
       ],
     }).compile();
 
@@ -27,6 +36,7 @@ describe('SubscriptionTemplatesController', () => {
       SubscriptionTemplatesController,
     );
     queryBus = module.get(QueryBus);
+    commandBus = module.get(CommandBus);
   });
 
   describe('findAll', () => {
@@ -34,11 +44,11 @@ describe('SubscriptionTemplatesController', () => {
       const templates = [{ id: 'tpl-1', name: 'Netflix' }];
       queryBus.execute.mockResolvedValue(templates);
 
-      const result = await controller.findAll(undefined);
+      const result = await controller.findAll(MOCK_USER, undefined);
 
       expect(result).toEqual(templates);
       expect(queryBus.execute).toHaveBeenCalledWith(
-        new GetSubscriptionTemplatesQuery(undefined),
+        new GetSubscriptionTemplatesQuery(MOCK_USER.userId, undefined),
       );
     });
 
@@ -46,25 +56,31 @@ describe('SubscriptionTemplatesController', () => {
       const templates = [{ id: 'tpl-1', name: 'Netflix' }];
       queryBus.execute.mockResolvedValue(templates);
 
-      const result = await controller.findAll(TemplateCategory.STREAMING);
+      const result = await controller.findAll(
+        MOCK_USER,
+        TemplateCategory.STREAMING,
+      );
 
       expect(result).toEqual(templates);
       expect(queryBus.execute).toHaveBeenCalledWith(
-        new GetSubscriptionTemplatesQuery(TemplateCategory.STREAMING),
+        new GetSubscriptionTemplatesQuery(
+          MOCK_USER.userId,
+          TemplateCategory.STREAMING,
+        ),
       );
     });
   });
 
   describe('findOne', () => {
-    it('should execute GetSubscriptionTemplateQuery with id', async () => {
+    it('should execute GetSubscriptionTemplateQuery with id and userId', async () => {
       const template = { id: 'tpl-uuid', name: 'Netflix' };
       queryBus.execute.mockResolvedValue(template);
 
-      const result = await controller.findOne('tpl-uuid');
+      const result = await controller.findOne(MOCK_USER, 'tpl-uuid');
 
       expect(result).toEqual(template);
       expect(queryBus.execute).toHaveBeenCalledWith(
-        new GetSubscriptionTemplateQuery('tpl-uuid'),
+        new GetSubscriptionTemplateQuery('tpl-uuid', MOCK_USER.userId),
       );
     });
   });
@@ -103,6 +119,36 @@ describe('SubscriptionTemplatesController', () => {
       expect(result).toEqual(prefillData);
       expect(queryBus.execute).toHaveBeenCalledWith(
         new GetSubscriptionPrefillQuery('tpl-uuid-2'),
+      );
+    });
+  });
+
+  describe('create', () => {
+    it('should execute CreateSubscriptionTemplateCommand', async () => {
+      const created = { id: 'new-tpl-id', name: 'My Service' };
+      commandBus.execute.mockResolvedValue(created);
+
+      const dto: CreateSubscriptionTemplateDto = {
+        name: 'My Service',
+        templateCategory: TemplateCategory.STREAMING,
+        defaultFrequency: BillingFrequency.MONTHLY,
+        defaultAmount: 9.99,
+      };
+
+      const result = await controller.create(MOCK_USER, dto);
+
+      expect(result).toEqual(created);
+      expect(commandBus.execute).toHaveBeenCalledWith(
+        new CreateSubscriptionTemplateCommand(
+          MOCK_USER.userId,
+          dto.name,
+          dto.templateCategory,
+          dto.description,
+          dto.iconUrl,
+          dto.serviceUrl,
+          dto.defaultAmount,
+          dto.defaultFrequency,
+        ),
       );
     });
   });

@@ -15,7 +15,10 @@ const CommandHandlers = [UpdatePreferencesHandler];
   providers: [
     ...QueryHandlers,
     ...CommandHandlers,
-    { provide: USER_PREFERENCES_REPOSITORY, useClass: MikroOrmUserPreferencesRepository },
+    {
+      provide: USER_PREFERENCES_REPOSITORY,
+      useClass: MikroOrmUserPreferencesRepository,
+    },
   ],
   exports: [USER_PREFERENCES_REPOSITORY],
 })

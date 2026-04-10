@@ -42,7 +42,7 @@ export class MikroOrmSubscriptionRepository implements ISubscriptionRepository {
     await this.em.flush();
   }
 
-  async update(subscription: Subscription): Promise<void> {
+  async update(_subscription: Subscription): Promise<void> {
     await this.em.flush();
   }
 }

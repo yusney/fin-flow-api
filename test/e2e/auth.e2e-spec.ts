@@ -16,7 +16,11 @@ describe('Auth (e2e)', () => {
     it('should register a new user and return { id }', async () => {
       const res = await req(app)
         .post('/api/auth/register')
-        .send({ name: 'John Doe', email: 'john@example.com', password: 'secret123' })
+        .send({
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'secret123',
+        })
         .expect(201);
 
       expect(res.body).toHaveProperty('id');
@@ -26,12 +30,20 @@ describe('Auth (e2e)', () => {
     it('should return 409 for duplicate email', async () => {
       await req(app)
         .post('/api/auth/register')
-        .send({ name: 'Jane Doe', email: 'duplicate@example.com', password: 'secret123' })
+        .send({
+          name: 'Jane Doe',
+          email: 'duplicate@example.com',
+          password: 'secret123',
+        })
         .expect(201);
 
       await req(app)
         .post('/api/auth/register')
-        .send({ name: 'Jane Copy', email: 'duplicate@example.com', password: 'secret456' })
+        .send({
+          name: 'Jane Copy',
+          email: 'duplicate@example.com',
+          password: 'secret456',
+        })
         .expect(409);
     });
 
@@ -52,16 +64,22 @@ describe('Auth (e2e)', () => {
     it('should return 400 for invalid email format', async () => {
       await req(app)
         .post('/api/auth/register')
-        .send({ name: 'Bad Email', email: 'not-an-email', password: 'secret123' })
+        .send({
+          name: 'Bad Email',
+          email: 'not-an-email',
+          password: 'secret123',
+        })
         .expect(400);
     });
   });
 
   describe('POST /api/auth/login', () => {
     beforeAll(async () => {
-      await req(app)
-        .post('/api/auth/register')
-        .send({ name: 'Login User', email: 'login@example.com', password: 'mypassword' });
+      await req(app).post('/api/auth/register').send({
+        name: 'Login User',
+        email: 'login@example.com',
+        password: 'mypassword',
+      });
     });
 
     it('should login with valid credentials and return { access_token }', async () => {
@@ -91,15 +109,11 @@ describe('Auth (e2e)', () => {
 
   describe('Protected routes without token', () => {
     it('should return 401 for GET /api/categories without token', async () => {
-      await req(app)
-        .get('/api/categories')
-        .expect(401);
+      await req(app).get('/api/categories').expect(401);
     });
 
     it('should return 401 for GET /api/transactions without token', async () => {
-      await req(app)
-        .get('/api/transactions')
-        .expect(401);
+      await req(app).get('/api/transactions').expect(401);
     });
   });
 });
