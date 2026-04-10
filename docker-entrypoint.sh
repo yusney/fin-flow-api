@@ -6,42 +6,18 @@ echo "🚀 Starting fin-flow-api..."
 # Run migrations if not skipped
 if [ "$SKIP_MIGRATIONS" != "true" ]; then
     echo "📦 Running database migrations..."
-    node -e "
-        const config = require('./dist/src/config/mikro-orm.config.js');
-        const { MikroORM } = require('@mikro-orm/postgresql');
-        const { Migrator } = require('@mikro-orm/migrations');
-        
-        (async () => {
-            try {
-                const orm = await MikroORM.init(config.default);
-                const migrator = new Migrator(orm.em);
-                await migrator.init(orm);
-                
-                // Get executed migrations count
-                const storage = migrator.getStorage();
-                const executed = await storage.getExecutedMigrations();
-                console.log('Already executed:', executed.length, 'migrations');
-                
-                // Run any pending migrations
-                const result = await migrator.runMigrations();
-                
-                if (result.length > 0) {
-                    console.log('✅ Executed', result.length, 'new migration(s):', result.map(m => m.name).join(', '));
-                } else {
-                    console.log('✅ No pending migrations');
-                }
-                
-                await orm.close();
-            } catch (error) {
-                console.error('❌ Migration failed:', error.message);
-                // Don't exit - let the app try to start anyway
-                // This allows for cases where DB is temporarily unavailable
-                if (process.env.REQUIRE_MIGRATIONS === 'true') {
-                    process.exit(1);
-                }
-            }
-        })();
-    "
+    
+    # Use MikroORM CLI directly - it handles the module format correctly
+    if npx mikro-orm migration:up 2>&1; then
+        echo "✅ Migrations completed successfully"
+    else
+        echo "❌ Migration failed"
+        # Don't exit - let the app try to start anyway
+        # This allows for cases where DB is temporarily unavailable
+        if [ "$REQUIRE_MIGRATIONS" = "true" ]; then
+            exit 1
+        fi
+    fi
 fi
 
 echo "🎯 Starting NestJS application..."

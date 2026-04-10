@@ -42,6 +42,9 @@ COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nestjs:nodejs /app/package.json ./
 
+# Copy MikroORM config for CLI migrations (CLI looks for this in project root)
+COPY --from=builder --chown=nestjs:nodejs /app/dist/mikro-orm.config.js ./
+
 # Copy entrypoint script
 COPY --chown=nestjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
