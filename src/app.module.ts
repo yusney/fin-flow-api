@@ -15,6 +15,7 @@ import { BudgetsModule } from './modules/budgets/budgets.module';
 import { SubscriptionsModule } from './modules/subscriptions/subscriptions.module';
 import { SubscriptionTemplatesModule } from './modules/subscription-templates/subscription-templates.module';
 import { UsersModule } from './modules/users/users.module';
+import { HealthModule } from './modules/health';
 import { DevDataSeeder } from './seeders/dev-data.seeder';
 
 @Module({
@@ -32,6 +33,7 @@ import { DevDataSeeder } from './seeders/dev-data.seeder';
     SubscriptionsModule,
     SubscriptionTemplatesModule,
     UsersModule,
+    HealthModule,
   ],
   providers: [
     {
