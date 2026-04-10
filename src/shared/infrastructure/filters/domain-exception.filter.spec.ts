@@ -99,7 +99,10 @@ describe('DomainExceptionFilter', () => {
 
     filter.catch(exception, mockHost);
 
-    const jsonCall = mockResponse.json.mock.calls[0][0];
+    const jsonCall = mockResponse.json.mock.calls[0][0] as Record<
+      string,
+      unknown
+    >;
     expect(jsonCall).toHaveProperty('statusCode');
     expect(jsonCall).toHaveProperty('message');
     expect(jsonCall).toHaveProperty('error');
