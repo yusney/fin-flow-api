@@ -23,6 +23,7 @@ import { DevDataSeeder } from './seeders/dev-data.seeder';
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig, jwtConfig] }),
     MikroOrmModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) =>
         defineConfig({
