@@ -13,7 +13,16 @@ if [ "$SKIP_MIGRATIONS" != "true" ]; then
         
         (async () => {
             try {
-                const orm = await MikroORM.init(config.default);
+                // Override migrations path for production (compiled JS files)
+                const prodConfig = {
+                    ...config.default,
+                    migrations: {
+                        ...config.default.migrations,
+                        path: './dist/src/migrations',
+                        glob: '*.js'
+                    }
+                };
+                const orm = await MikroORM.init(prodConfig);
                 const migrator = new Migrator(orm.em);
                 await migrator.init(orm);
                 
