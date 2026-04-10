@@ -65,7 +65,9 @@ describe('Subscriptions (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
-      const gym = listRes.body.find((s: any) => s.description === 'Gym membership');
+      const gym = listRes.body.find(
+        (s: any) => s.description === 'Gym membership',
+      );
       expect(gym).toBeDefined();
       expect(gym.frequency).toBe('MONTHLY');
       expect(gym.type).toBe('GENERAL');
@@ -112,7 +114,9 @@ describe('Subscriptions (e2e)', () => {
       expect(Array.isArray(res.body)).toBe(true);
       expect(res.body.length).toBeGreaterThanOrEqual(1);
 
-      const netflix = res.body.find((s: any) => s.description === 'Netflix Premium');
+      const netflix = res.body.find(
+        (s: any) => s.description === 'Netflix Premium',
+      );
       expect(netflix).toBeDefined();
       expect(netflix.startDate).toBeDefined();
       expect(netflix.frequency).toBe('ANNUAL');

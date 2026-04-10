@@ -165,12 +165,8 @@ export class DevDataSeeder implements OnModuleInit {
     user2Cats: Record<string, Category>,
   ): Transaction[] {
     const transactions: Transaction[] = [];
-    const now = new Date();
 
     // User 1 transactions - Current month (March 2026)
-    const march2026 = new Date(2026, 2, 1); // March = 2 (0-indexed)
-
-    // Income transactions
     transactions.push(
       new Transaction(
         5000,

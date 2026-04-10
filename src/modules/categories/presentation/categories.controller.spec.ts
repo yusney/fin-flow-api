@@ -3,6 +3,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CategoriesController } from './categories.controller';
 import { CreateCategoryCommand } from '../application/commands/create-category.command';
 import { GetCategoriesQuery } from '../application/queries/get-categories.query';
+import { CreateCategoryDto } from './dtos/create-category.dto';
 
 describe('CategoriesController', () => {
   let controller: CategoriesController;
@@ -49,9 +50,9 @@ describe('CategoriesController', () => {
       const expectedResult = { id: 'cat-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = { name: 'Food', type: 'expense' };
+      const dto: CreateCategoryDto = { name: 'Food', type: 'expense' };
       const user = { userId: 'user-uuid' };
-      const result = await controller.create(dto as any, user);
+      const result = await controller.create(dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(

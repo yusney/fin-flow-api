@@ -7,12 +7,7 @@ export class Category extends BaseEntity {
   public type: string;
   public userId: string;
 
-  constructor(
-    name: string,
-    type: string,
-    userId: string,
-    id?: string,
-  ) {
+  constructor(name: string, type: string, userId: string, id?: string) {
     super(id);
     this.name = name;
     this.type = type;
@@ -32,16 +27,12 @@ export class Category extends BaseEntity {
     }
 
     if (trimmedName.length > 100) {
-      throw new ValidationException(
-        'Name must not exceed 100 characters',
-      );
+      throw new ValidationException('Name must not exceed 100 characters');
     }
 
     const validTypes = Object.values(CategoryType) as string[];
     if (!validTypes.includes(props.type)) {
-      throw new ValidationException(
-        'Type must be either income or expense',
-      );
+      throw new ValidationException('Type must be either income or expense');
     }
 
     return new Category(trimmedName, props.type, props.userId, props.id);

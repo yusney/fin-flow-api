@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { MikroORM, defineConfig } from '@mikro-orm/sqlite';
+import { MikroORM, defineConfig } from '@mikro-orm/postgresql';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -13,18 +13,22 @@ import { TransactionsModule } from '../../src/modules/transactions/transactions.
 import { BudgetsModule } from '../../src/modules/budgets/budgets.module';
 import { SubscriptionsModule } from '../../src/modules/subscriptions/subscriptions.module';
 import { SubscriptionTemplatesModule } from '../../src/modules/subscription-templates/subscription-templates.module';
+import { PreferencesModule } from '../../src/modules/preferences/preferences.module';
 import { UserSchema } from '../../src/modules/auth/infrastructure/persistence/user.schema';
 import { CategorySchema } from '../../src/modules/categories/infrastructure/persistence/category.schema';
 import { TransactionSchema } from '../../src/modules/transactions/infrastructure/persistence/transaction.schema';
 import { BudgetSchema } from '../../src/modules/budgets/infrastructure/persistence/budget.schema';
 import { SubscriptionSchema } from '../../src/modules/subscriptions/infrastructure/persistence/subscription.schema';
 import { SubscriptionTemplateSchema } from '../../src/modules/subscription-templates/infrastructure/persistence/subscription-template.schema';
+import { UserPreferencesSchema } from '../../src/modules/preferences/infrastructure/persistence/user-preferences.schema';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const supertest = require('supertest');
 
 const testOrmConfig = defineConfig({
-  dbName: ':memory:',
+  clientUrl:
+    process.env.DATABASE_URL ||
+    'postgresql://postgres:postgres@localhost:5432/fin_flow_test',
   entities: [
     UserSchema,
     CategorySchema,
@@ -32,6 +36,7 @@ const testOrmConfig = defineConfig({
     BudgetSchema,
     SubscriptionSchema,
     SubscriptionTemplateSchema,
+    UserPreferencesSchema,
   ],
   allowGlobalContext: true,
 });
@@ -53,6 +58,7 @@ export async function createTestApp(): Promise<INestApplication> {
       BudgetsModule,
       SubscriptionsModule,
       SubscriptionTemplatesModule,
+      PreferencesModule,
     ],
   }).compile();
 
@@ -61,9 +67,14 @@ export async function createTestApp(): Promise<INestApplication> {
   await app.init();
 
   const orm = app.get(MikroORM);
-  await orm.schema.create();
+  await orm.schema.refresh();
 
   return app;
+}
+
+export async function clearDatabase(app: INestApplication): Promise<void> {
+  const orm = app.get(MikroORM);
+  await orm.schema.clear();
 }
 
 export function req(app: INestApplication) {

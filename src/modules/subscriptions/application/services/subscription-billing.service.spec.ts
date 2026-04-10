@@ -2,7 +2,6 @@ import { CommandBus } from '@nestjs/cqrs';
 import { SubscriptionBillingService } from './subscription-billing.service';
 import { ISubscriptionRepository } from '../../domain/ports/subscription.repository';
 import { Subscription } from '../../domain/entities/subscription.entity';
-import { CreateTransactionCommand } from '../../../transactions/application/commands/create-transaction.command';
 import { BillingFrequency } from '../../domain/enums/billing-frequency.enum';
 
 describe('SubscriptionBillingService', () => {

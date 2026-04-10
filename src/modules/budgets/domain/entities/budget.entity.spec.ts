@@ -26,27 +26,27 @@ describe('Budget Entity', () => {
     });
 
     it('should throw ValidationException when limitAmount is not positive', () => {
-      expect(() =>
-        Budget.create({ ...validProps, limitAmount: 0 }),
-      ).toThrow(ValidationException);
-      expect(() =>
-        Budget.create({ ...validProps, limitAmount: -100 }),
-      ).toThrow(ValidationException);
+      expect(() => Budget.create({ ...validProps, limitAmount: 0 })).toThrow(
+        ValidationException,
+      );
+      expect(() => Budget.create({ ...validProps, limitAmount: -100 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when month is not between 1 and 12', () => {
-      expect(() =>
-        Budget.create({ ...validProps, month: 0 }),
-      ).toThrow(ValidationException);
-      expect(() =>
-        Budget.create({ ...validProps, month: 13 }),
-      ).toThrow(ValidationException);
+      expect(() => Budget.create({ ...validProps, month: 0 })).toThrow(
+        ValidationException,
+      );
+      expect(() => Budget.create({ ...validProps, month: 13 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should throw ValidationException when year is less than 2000', () => {
-      expect(() =>
-        Budget.create({ ...validProps, year: 1999 }),
-      ).toThrow(ValidationException);
+      expect(() => Budget.create({ ...validProps, year: 1999 })).toThrow(
+        ValidationException,
+      );
     });
 
     it('should accept boundary values for month (1 and 12)', () => {

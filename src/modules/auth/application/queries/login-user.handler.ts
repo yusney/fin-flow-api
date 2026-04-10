@@ -19,9 +19,7 @@ export class LoginUserHandler implements IQueryHandler<LoginUserQuery> {
     private readonly jwtService: JwtService,
   ) {}
 
-  async execute(
-    query: LoginUserQuery,
-  ): Promise<{ access_token: string }> {
+  async execute(query: LoginUserQuery): Promise<{ access_token: string }> {
     const user = await this.userRepository.findByEmail(query.email);
     if (!user) {
       throw new NotFoundException('User not found');

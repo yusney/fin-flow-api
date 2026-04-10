@@ -14,9 +14,7 @@ export interface BudgetStatusItem {
 }
 
 @QueryHandler(GetBudgetStatusQuery)
-export class GetBudgetStatusHandler
-  implements IQueryHandler<GetBudgetStatusQuery>
-{
+export class GetBudgetStatusHandler implements IQueryHandler<GetBudgetStatusQuery> {
   constructor(
     @Inject(BUDGET_REPOSITORY)
     private readonly budgetRepository: IBudgetRepository,

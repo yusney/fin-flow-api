@@ -9,6 +9,8 @@ import { GetSubscriptionsQuery } from '../application/queries/get-subscriptions.
 import { GetSubscriptionHistoryQuery } from '../application/queries/get-subscription-history.query';
 import { BillingFrequency } from '../domain/enums/billing-frequency.enum';
 import { SubscriptionType } from '../domain/enums/subscription-type.enum';
+import { CreateSubscriptionDto } from './dtos/create-subscription.dto';
+import { UpdateSubscriptionDto } from './dtos/update-subscription.dto';
 
 describe('SubscriptionsController', () => {
   let controller: SubscriptionsController;
@@ -55,7 +57,7 @@ describe('SubscriptionsController', () => {
       const expectedResult = { id: 'sub-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = {
+      const dto: CreateSubscriptionDto = {
         amount: 9.99,
         description: 'Netflix',
         billingDay: 15,
@@ -63,7 +65,7 @@ describe('SubscriptionsController', () => {
         startDate: '2026-01-15',
       };
       const user = { userId: 'user-uuid' };
-      const result = await controller.create(dto as any, user);
+      const result = await controller.create(dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(
@@ -86,7 +88,7 @@ describe('SubscriptionsController', () => {
       const expectedResult = { id: 'sub-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = {
+      const dto: CreateSubscriptionDto = {
         amount: 14.99,
         description: 'Spotify',
         billingDay: 1,
@@ -98,7 +100,7 @@ describe('SubscriptionsController', () => {
         serviceUrl: 'https://spotify.com',
       };
       const user = { userId: 'user-uuid' };
-      const result = await controller.create(dto as any, user);
+      const result = await controller.create(dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(
@@ -120,7 +122,7 @@ describe('SubscriptionsController', () => {
     it('should default optional fields when not provided', async () => {
       commandBus.execute.mockResolvedValue({ id: 'sub-uuid' });
 
-      const dto = {
+      const dto: CreateSubscriptionDto = {
         amount: 9.99,
         description: 'Netflix',
         billingDay: 15,
@@ -128,7 +130,7 @@ describe('SubscriptionsController', () => {
         startDate: '2026-01-15',
       };
       const user = { userId: 'user-uuid' };
-      await controller.create(dto as any, user);
+      await controller.create(dto, user);
 
       const command = commandBus.execute.mock
         .calls[0][0] as CreateSubscriptionCommand;
@@ -160,9 +162,9 @@ describe('SubscriptionsController', () => {
       const expectedResult = { id: 'new-uuid', amount: 17.99 };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = { amount: 17.99 };
+      const dto: UpdateSubscriptionDto = { amount: 17.99 };
       const user = { userId: 'user-uuid' };
-      const result = await controller.update('sub-uuid', dto as any, user);
+      const result = await controller.update('sub-uuid', dto, user);
 
       expect(result).toEqual(expectedResult);
       expect(commandBus.execute).toHaveBeenCalledWith(
@@ -183,7 +185,7 @@ describe('SubscriptionsController', () => {
       const expectedResult = { id: 'new-uuid' };
       commandBus.execute.mockResolvedValue(expectedResult);
 
-      const dto = {
+      const dto: UpdateSubscriptionDto = {
         amount: 19.99,
         description: 'Netflix Premium',
         billingDay: 20,
@@ -192,7 +194,7 @@ describe('SubscriptionsController', () => {
         serviceUrl: 'https://netflix.com',
       };
       const user = { userId: 'user-uuid' };
-      await controller.update('sub-uuid', dto as any, user);
+      await controller.update('sub-uuid', dto, user);
 
       expect(commandBus.execute).toHaveBeenCalledWith(
         new UpdateSubscriptionCommand(
@@ -209,12 +211,12 @@ describe('SubscriptionsController', () => {
     });
 
     it('should throw BadRequestException when no fields provided', async () => {
-      const dto = {};
+      const dto: UpdateSubscriptionDto = {};
       const user = { userId: 'user-uuid' };
 
-      await expect(
-        controller.update('sub-uuid', dto as any, user),
-      ).rejects.toThrow(BadRequestException);
+      await expect(controller.update('sub-uuid', dto, user)).rejects.toThrow(
+        BadRequestException,
+      );
       expect(commandBus.execute).not.toHaveBeenCalled();
     });
   });

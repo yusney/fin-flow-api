@@ -25,8 +25,6 @@ describe('CreateCategoryHandler', () => {
 
     expect(result).toHaveProperty('id');
     expect(typeof result.id).toBe('string');
-    expect(categoryRepository.save).toHaveBeenCalledWith(
-      expect.any(Category),
-    );
+    expect(categoryRepository.save).toHaveBeenCalledWith(expect.any(Category));
   });
 });

@@ -37,13 +37,15 @@ export class TransactionsController {
   ) {}
 
   @Get()
-  @ApiOperation({ summary: 'List transactions with optional month/year filter' })
+  @ApiOperation({
+    summary: 'List transactions with optional month/year filter',
+  })
   @ApiQuery({ name: 'month', required: false, type: Number })
   @ApiQuery({ name: 'year', required: false, type: Number })
   async findAll(
     @CurrentUser() user: { userId: string },
     @Query() filter: GetTransactionsFilterDto,
-  ) {
+  ): Promise<unknown> {
     return this.queryBus.execute(
       new GetTransactionsQuery(user.userId, filter.month, filter.year),
     );
@@ -56,13 +58,11 @@ export class TransactionsController {
   async getSummary(
     @CurrentUser() user: { userId: string },
     @Query() filter: GetTransactionsFilterDto,
-  ) {
+  ): Promise<unknown> {
     const now = new Date();
     const month = filter.month || now.getMonth() + 1;
     const year = filter.year || now.getFullYear();
-    return this.queryBus.execute(
-      new GetSummaryQuery(user.userId, month, year),
-    );
+    return this.queryBus.execute(new GetSummaryQuery(user.userId, month, year));
   }
 
   @Post()
@@ -71,7 +71,7 @@ export class TransactionsController {
   async create(
     @Body() dto: CreateTransactionDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new CreateTransactionCommand(
         dto.amount,
@@ -89,7 +89,7 @@ export class TransactionsController {
     @Param('id') id: string,
     @Body() dto: UpdateTransactionDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new UpdateTransactionCommand(
         id,
@@ -108,7 +108,7 @@ export class TransactionsController {
   async delete(
     @Param('id') id: string,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new DeleteTransactionCommand(id, user.userId),
     );

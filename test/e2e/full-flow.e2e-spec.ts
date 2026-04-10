@@ -21,7 +21,11 @@ describe('Full User Journey (e2e)', () => {
     // 1. Register user
     const registerRes = await req(app)
       .post('/api/auth/register')
-      .send({ name: 'Journey User', email: 'journey@example.com', password: 'journey123' })
+      .send({
+        name: 'Journey User',
+        email: 'journey@example.com',
+        password: 'journey123',
+      })
       .expect(201);
 
     expect(registerRes.body).toHaveProperty('id');
@@ -178,7 +182,9 @@ describe('Full User Journey (e2e)', () => {
       .set(auth)
       .expect(200);
 
-    const toggledSub = listAfterToggle.body.find((s: any) => s.id === subscriptionId);
+    const toggledSub = listAfterToggle.body.find(
+      (s: any) => s.id === subscriptionId,
+    );
     expect(toggledSub.isActive).toBe(false);
   });
 });

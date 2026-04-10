@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00005_enhanceEnumCheckConstraints extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     // ============================================
     // SECTION 1: categories.type - Complete enum values
     // ============================================
@@ -67,7 +67,7 @@ export class Migration00005_enhanceEnumCheckConstraints extends Migration {
     `);
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     // Revert to original constraints from migration 001
     this.addSql(
       `ALTER TABLE categories DROP CONSTRAINT IF EXISTS chk_categories_type;`,

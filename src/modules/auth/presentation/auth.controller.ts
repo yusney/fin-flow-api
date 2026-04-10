@@ -22,7 +22,7 @@ export class AuthController {
   @ApiResponse({ status: 201, description: 'User created' })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 409, description: 'Email already exists' })
-  async register(@Body() dto: RegisterDto) {
+  async register(@Body() dto: RegisterDto): Promise<unknown> {
     return this.commandBus.execute(
       new RegisterUserCommand(dto.name, dto.email, dto.password),
     );
@@ -34,7 +34,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Login and get JWT token' })
   @ApiResponse({ status: 200, description: 'Returns access_token' })
   @ApiResponse({ status: 400, description: 'Invalid credentials' })
-  async login(@Body() dto: LoginDto) {
+  async login(@Body() dto: LoginDto): Promise<unknown> {
     return this.queryBus.execute(new LoginUserQuery(dto.email, dto.password));
   }
 }

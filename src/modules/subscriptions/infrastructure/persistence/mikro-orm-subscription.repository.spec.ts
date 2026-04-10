@@ -6,6 +6,7 @@ jest.mock('@nestjs/common', () => ({
   Injectable: () => (target: any) => target,
 }));
 
+import { EntityManager } from '@mikro-orm/core';
 import { MikroOrmSubscriptionRepository } from './mikro-orm-subscription.repository';
 import { Subscription } from '../../domain/entities/subscription.entity';
 
@@ -25,7 +26,9 @@ describe('MikroOrmSubscriptionRepository', () => {
       persist: jest.fn(),
       flush: jest.fn(),
     };
-    repository = new MikroOrmSubscriptionRepository(em as any);
+    repository = new MikroOrmSubscriptionRepository(
+      em as unknown as EntityManager,
+    );
   });
 
   describe('findActiveDueToday', () => {

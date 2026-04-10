@@ -24,7 +24,7 @@ export class MikroOrmUserRepository implements IUserRepository {
     await this.em.flush();
   }
 
-  async update(user: User): Promise<void> {
+  async update(_user: User): Promise<void> {
     await this.em.flush();
   }
 }

@@ -15,6 +15,11 @@ export class GlobalTemplatesSeeder implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
+    // Skip seeding in test environment - tests manage their own data
+    if (process.env.NODE_ENV === 'test') {
+      this.logger.log('GlobalTemplatesSeeder: skipped in test environment');
+      return;
+    }
     await this.seed();
   }
 
