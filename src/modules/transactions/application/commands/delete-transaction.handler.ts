@@ -6,9 +6,7 @@ import type { ITransactionRepository } from '../../domain/ports/transaction.repo
 import { NotFoundException } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(DeleteTransactionCommand)
-export class DeleteTransactionHandler
-  implements ICommandHandler<DeleteTransactionCommand>
-{
+export class DeleteTransactionHandler implements ICommandHandler<DeleteTransactionCommand> {
   constructor(
     @Inject(TRANSACTION_REPOSITORY)
     private readonly transactionRepository: ITransactionRepository,

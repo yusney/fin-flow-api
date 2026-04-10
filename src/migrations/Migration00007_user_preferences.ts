@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00007_user_preferences extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     this.addSql(`
       CREATE TABLE "user_preferences" (
         "id" uuid PRIMARY KEY,
@@ -31,7 +31,7 @@ export class Migration00007_user_preferences extends Migration {
     `);
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     this.addSql('DROP TABLE IF EXISTS "user_preferences" CASCADE;');
   }
 }

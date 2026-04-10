@@ -24,7 +24,7 @@ export class CategoriesController {
 
   @Get()
   @ApiOperation({ summary: 'List user categories' })
-  async findAll(@CurrentUser() user: { userId: string }) {
+  async findAll(@CurrentUser() user: { userId: string }): Promise<unknown> {
     return this.queryBus.execute(new GetCategoriesQuery(user.userId));
   }
 
@@ -34,7 +34,7 @@ export class CategoriesController {
   async create(
     @Body() dto: CreateCategoryDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new CreateCategoryCommand(dto.name, dto.type, user.userId),
     );

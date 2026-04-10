@@ -49,7 +49,7 @@ export class UpdateSubscriptionDto {
       'Service URL (required for DIGITAL_SERVICE, forbidden for GENERAL)',
   })
   @ValidateIf(
-    (o) =>
+    (o: UpdateSubscriptionDto) =>
       o.type === SubscriptionType.DIGITAL_SERVICE || o.serviceUrl !== undefined,
   )
   @IsUrl({}, { message: 'serviceUrl must be a valid URL' })

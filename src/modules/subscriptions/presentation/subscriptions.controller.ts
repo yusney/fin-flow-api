@@ -34,7 +34,7 @@ export class SubscriptionsController {
 
   @Get()
   @ApiOperation({ summary: 'List all subscriptions' })
-  async findAll(@CurrentUser() user: { userId: string }) {
+  async findAll(@CurrentUser() user: { userId: string }): Promise<unknown> {
     return this.queryBus.execute(new GetSubscriptionsQuery(user.userId));
   }
 
@@ -44,7 +44,7 @@ export class SubscriptionsController {
   async create(
     @Body() dto: CreateSubscriptionDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new CreateSubscriptionCommand(
         dto.amount,
@@ -66,7 +66,7 @@ export class SubscriptionsController {
   async toggle(
     @Param('id') id: string,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new ToggleSubscriptionCommand(id, user.userId),
     );
@@ -78,7 +78,7 @@ export class SubscriptionsController {
     @Param('id') id: string,
     @Body() dto: UpdateSubscriptionDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     const hasUpdate = Object.values(dto).some((v) => v !== undefined);
     if (!hasUpdate) {
       throw new BadRequestException('At least one field must be provided');
@@ -103,7 +103,7 @@ export class SubscriptionsController {
   async getHistory(
     @Param('id') id: string,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.queryBus.execute(
       new GetSubscriptionHistoryQuery(id, user.userId),
     );

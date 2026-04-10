@@ -67,7 +67,9 @@ describe('UpdatePreferencesHandler', () => {
     preferencesRepository.findByUserId.mockResolvedValue(null);
 
     await expect(
-      handler.execute(new UpdatePreferencesCommand('user-uuid', { currency: Currency.EUR })),
+      handler.execute(
+        new UpdatePreferencesCommand('user-uuid', { currency: Currency.EUR }),
+      ),
     ).rejects.toThrow(NotFoundException);
 
     expect(preferencesRepository.save).not.toHaveBeenCalled();

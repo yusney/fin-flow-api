@@ -12,9 +12,7 @@ import { UserPreferences } from '../../../preferences/domain/entities/user-prefe
 import { ConflictException } from '../../../../shared/domain/exceptions';
 
 @CommandHandler(RegisterUserCommand)
-export class RegisterUserHandler
-  implements ICommandHandler<RegisterUserCommand>
-{
+export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand> {
   constructor(
     @Inject(USER_REPOSITORY) private readonly userRepository: IUserRepository,
     @Inject(HASHING_SERVICE) private readonly hashingService: IHashingService,

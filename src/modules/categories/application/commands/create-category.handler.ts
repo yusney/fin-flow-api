@@ -6,9 +6,7 @@ import type { ICategoryRepository } from '../../domain/ports/category.repository
 import { Category } from '../../domain/entities/category.entity';
 
 @CommandHandler(CreateCategoryCommand)
-export class CreateCategoryHandler
-  implements ICommandHandler<CreateCategoryCommand>
-{
+export class CreateCategoryHandler implements ICommandHandler<CreateCategoryCommand> {
   constructor(
     @Inject(CATEGORY_REPOSITORY)
     private readonly categoryRepository: ICategoryRepository,

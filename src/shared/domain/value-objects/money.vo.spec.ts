@@ -45,7 +45,9 @@ describe('Money Value Object', () => {
     it('should throw when adding different currencies', () => {
       const usd = new Money(100, 'USD');
       const eur = new Money(50, 'EUR');
-      expect(() => usd.add(eur)).toThrow('Cannot operate on different currencies: USD vs EUR');
+      expect(() => usd.add(eur)).toThrow(
+        'Cannot operate on different currencies: USD vs EUR',
+      );
     });
   });
 
@@ -68,7 +70,9 @@ describe('Money Value Object', () => {
     it('should throw when subtracting different currencies', () => {
       const usd = new Money(100, 'USD');
       const eur = new Money(50, 'EUR');
-      expect(() => usd.subtract(eur)).toThrow('Cannot operate on different currencies: USD vs EUR');
+      expect(() => usd.subtract(eur)).toThrow(
+        'Cannot operate on different currencies: USD vs EUR',
+      );
     });
   });
 

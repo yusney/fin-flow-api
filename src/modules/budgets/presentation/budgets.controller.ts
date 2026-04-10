@@ -35,7 +35,7 @@ export class BudgetsController {
   async create(
     @Body() dto: CreateBudgetDto,
     @CurrentUser() user: { userId: string },
-  ) {
+  ): Promise<unknown> {
     return this.commandBus.execute(
       new CreateBudgetCommand(
         dto.limitAmount,
@@ -54,7 +54,7 @@ export class BudgetsController {
   async getStatus(
     @CurrentUser() user: { userId: string },
     @Query() filter: GetBudgetStatusFilterDto,
-  ) {
+  ): Promise<unknown> {
     const now = new Date();
     return this.queryBus.execute(
       new GetBudgetStatusQuery(

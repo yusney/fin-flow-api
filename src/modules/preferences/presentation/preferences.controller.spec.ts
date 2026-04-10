@@ -34,7 +34,9 @@ describe('PreferencesController', () => {
 
       const result = await controller.getPreferences(mockUser);
 
-      expect(queryBus.execute).toHaveBeenCalledWith(new GetPreferencesQuery('user-uuid'));
+      expect(queryBus.execute).toHaveBeenCalledWith(
+        new GetPreferencesQuery('user-uuid'),
+      );
       expect(result).toEqual(mockPrefsJSON);
     });
   });

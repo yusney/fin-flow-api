@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00008_subscription_templates_global extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     this.addSql(
       'ALTER TABLE "subscription_templates" DROP COLUMN IF EXISTS "ownership";',
     );
@@ -10,7 +10,7 @@ export class Migration00008_subscription_templates_global extends Migration {
     );
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     this.addSql(
       'ALTER TABLE "subscription_templates" ADD COLUMN "ownership" varchar(10) DEFAULT \'GLOBAL\' NOT NULL;',
     );

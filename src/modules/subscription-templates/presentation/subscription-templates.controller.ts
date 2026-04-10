@@ -22,13 +22,15 @@ export class SubscriptionTemplatesController {
   @Get()
   @ApiOperation({ summary: 'List subscription templates' })
   @ApiQuery({ name: 'category', enum: TemplateCategory, required: false })
-  async findAll(@Query('category') category?: TemplateCategory) {
+  async findAll(
+    @Query('category') category?: TemplateCategory,
+  ): Promise<unknown> {
     return this.queryBus.execute(new GetSubscriptionTemplatesQuery(category));
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a subscription template by id' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<unknown> {
     return this.queryBus.execute(new GetSubscriptionTemplateQuery(id));
   }
 

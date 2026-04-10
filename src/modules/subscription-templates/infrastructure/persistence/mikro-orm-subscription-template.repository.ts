@@ -13,7 +13,7 @@ export class MikroOrmSubscriptionTemplateRepository implements ISubscriptionTemp
   }
 
   async findAll(category?: TemplateCategory): Promise<SubscriptionTemplate[]> {
-    const filter: any = {};
+    const filter: { category?: TemplateCategory } = {};
 
     if (category) {
       filter.category = category;

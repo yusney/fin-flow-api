@@ -79,10 +79,14 @@ export class UserPreferences extends BaseEntity {
     if (props.currency !== undefined) this.currency = props.currency;
     if (props.dateFormat !== undefined) this.dateFormat = props.dateFormat;
     if (props.language !== undefined) this.language = props.language;
-    if (props.emailNotifications !== undefined) this.emailNotifications = props.emailNotifications;
-    if (props.pushNotifications !== undefined) this.pushNotifications = props.pushNotifications;
-    if (props.budgetAlerts !== undefined) this.budgetAlerts = props.budgetAlerts;
-    if (props.subscriptionReminders !== undefined) this.subscriptionReminders = props.subscriptionReminders;
+    if (props.emailNotifications !== undefined)
+      this.emailNotifications = props.emailNotifications;
+    if (props.pushNotifications !== undefined)
+      this.pushNotifications = props.pushNotifications;
+    if (props.budgetAlerts !== undefined)
+      this.budgetAlerts = props.budgetAlerts;
+    if (props.subscriptionReminders !== undefined)
+      this.subscriptionReminders = props.subscriptionReminders;
     this.updatedAt = new Date();
   }
 

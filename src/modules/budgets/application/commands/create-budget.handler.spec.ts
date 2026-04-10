@@ -4,7 +4,10 @@ import { IBudgetRepository } from '../../domain/ports/budget.repository';
 import { ICategoryRepository } from '../../../categories/domain/ports/category.repository';
 import { Budget } from '../../domain/entities/budget.entity';
 import { Category } from '../../../categories/domain/entities/category.entity';
-import { ValidationException, NotFoundException } from '../../../../shared/domain/exceptions';
+import {
+  ValidationException,
+  NotFoundException,
+} from '../../../../shared/domain/exceptions';
 
 describe('CreateBudgetHandler', () => {
   let handler: CreateBudgetHandler;
@@ -38,7 +41,13 @@ describe('CreateBudgetHandler', () => {
     budgetRepository.findByUserCategoryAndMonth.mockResolvedValue(null);
     budgetRepository.save.mockResolvedValue(undefined);
 
-    const command = new CreateBudgetCommand(5000, 3, 2026, expenseCategory.id, 'user-uuid');
+    const command = new CreateBudgetCommand(
+      5000,
+      3,
+      2026,
+      expenseCategory.id,
+      'user-uuid',
+    );
     const result = await handler.execute(command);
 
     expect(result).toHaveProperty('id');
@@ -54,7 +63,13 @@ describe('CreateBudgetHandler', () => {
     });
     categoryRepository.findById.mockResolvedValue(incomeCategory);
 
-    const command = new CreateBudgetCommand(5000, 3, 2026, incomeCategory.id, 'user-uuid');
+    const command = new CreateBudgetCommand(
+      5000,
+      3,
+      2026,
+      incomeCategory.id,
+      'user-uuid',
+    );
 
     await expect(handler.execute(command)).rejects.toThrow(ValidationException);
     await expect(handler.execute(command)).rejects.toThrow(
@@ -65,7 +80,13 @@ describe('CreateBudgetHandler', () => {
   it('should throw NotFoundException when category does not exist', async () => {
     categoryRepository.findById.mockResolvedValue(null);
 
-    const command = new CreateBudgetCommand(5000, 3, 2026, 'non-existent-id', 'user-uuid');
+    const command = new CreateBudgetCommand(
+      5000,
+      3,
+      2026,
+      'non-existent-id',
+      'user-uuid',
+    );
 
     await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
   });
@@ -78,7 +99,13 @@ describe('CreateBudgetHandler', () => {
     });
     categoryRepository.findById.mockResolvedValue(otherUserCategory);
 
-    const command = new CreateBudgetCommand(5000, 3, 2026, otherUserCategory.id, 'user-uuid');
+    const command = new CreateBudgetCommand(
+      5000,
+      3,
+      2026,
+      otherUserCategory.id,
+      'user-uuid',
+    );
 
     await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
   });
@@ -98,10 +125,18 @@ describe('CreateBudgetHandler', () => {
     });
 
     categoryRepository.findById.mockResolvedValue(expenseCategory);
-    budgetRepository.findByUserCategoryAndMonth.mockResolvedValue(existingBudget);
+    budgetRepository.findByUserCategoryAndMonth.mockResolvedValue(
+      existingBudget,
+    );
     budgetRepository.update.mockResolvedValue(undefined);
 
-    const command = new CreateBudgetCommand(5000, 3, 2026, expenseCategory.id, 'user-uuid');
+    const command = new CreateBudgetCommand(
+      5000,
+      3,
+      2026,
+      expenseCategory.id,
+      'user-uuid',
+    );
     const result = await handler.execute(command);
 
     expect(result).toHaveProperty('id', existingBudget.id);

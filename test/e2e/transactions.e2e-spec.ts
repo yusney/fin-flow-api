@@ -5,7 +5,7 @@ describe('Transactions (e2e)', () => {
   let app: INestApplication;
   let token: string;
   let expenseCategoryId: string;
-  let incomeCategoryId: string;
+  let _incomeCategoryId: string;
 
   beforeAll(async () => {
     app = await createTestApp();
@@ -24,7 +24,7 @@ describe('Transactions (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'Salary', type: 'income' })
       .expect(201);
-    incomeCategoryId = incomeRes.body.id;
+    _incomeCategoryId = incomeRes.body.id;
   });
 
   afterAll(async () => {

@@ -6,9 +6,7 @@ import type { ITransactionRepository } from '../../domain/ports/transaction.repo
 import { Transaction } from '../../domain/entities/transaction.entity';
 
 @CommandHandler(CreateTransactionCommand)
-export class CreateTransactionHandler
-  implements ICommandHandler<CreateTransactionCommand>
-{
+export class CreateTransactionHandler implements ICommandHandler<CreateTransactionCommand> {
   constructor(
     @Inject(TRANSACTION_REPOSITORY)
     private readonly transactionRepository: ITransactionRepository,

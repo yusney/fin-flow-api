@@ -26,7 +26,10 @@ describe('GetBudgetStatusHandler', () => {
       delete: jest.fn(),
       getSummary: jest.fn(),
     };
-    handler = new GetBudgetStatusHandler(budgetRepository, transactionRepository);
+    handler = new GetBudgetStatusHandler(
+      budgetRepository,
+      transactionRepository,
+    );
   });
 
   it('should return budget status array with spent and remaining amounts', async () => {

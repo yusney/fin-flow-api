@@ -33,7 +33,7 @@ export class MikroOrmBudgetRepository implements IBudgetRepository {
     await this.em.flush();
   }
 
-  async update(budget: Budget): Promise<void> {
+  async update(_budget: Budget): Promise<void> {
     await this.em.flush();
   }
 }

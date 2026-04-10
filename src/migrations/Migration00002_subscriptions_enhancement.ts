@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00002_subscriptions_enhancement extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     // Add new columns to subscriptions
     this.addSql(`
       ALTER TABLE "subscriptions"
@@ -16,11 +16,15 @@ export class Migration00002_subscriptions_enhancement extends Migration {
     this.addSql(`UPDATE "subscriptions" SET "start_date" = "created_at";`);
 
     // Indexes for billing queries
-    this.addSql('CREATE INDEX "idx_subscriptions_frequency" ON "subscriptions" ("frequency");');
-    this.addSql('CREATE INDEX "idx_subscriptions_start_date" ON "subscriptions" ("start_date");');
+    this.addSql(
+      'CREATE INDEX "idx_subscriptions_frequency" ON "subscriptions" ("frequency");',
+    );
+    this.addSql(
+      'CREATE INDEX "idx_subscriptions_start_date" ON "subscriptions" ("start_date");',
+    );
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     this.addSql('DROP INDEX IF EXISTS "idx_subscriptions_start_date";');
     this.addSql('DROP INDEX IF EXISTS "idx_subscriptions_frequency";');
     this.addSql(`

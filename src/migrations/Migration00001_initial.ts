@@ -1,7 +1,7 @@
 import { Migration } from '@mikro-orm/migrations';
 
 export class Migration00001_initial extends Migration {
-  override async up(): Promise<void> {
+  override up(): void {
     // Users table
     this.addSql(`
       CREATE TABLE "users" (
@@ -71,16 +71,28 @@ export class Migration00001_initial extends Migration {
     `);
 
     // Indexes
-    this.addSql('CREATE INDEX "idx_categories_user_id" ON "categories" ("user_id");');
-    this.addSql('CREATE INDEX "idx_transactions_user_id" ON "transactions" ("user_id");');
-    this.addSql('CREATE INDEX "idx_transactions_category_id" ON "transactions" ("category_id");');
-    this.addSql('CREATE INDEX "idx_transactions_date" ON "transactions" ("date");');
+    this.addSql(
+      'CREATE INDEX "idx_categories_user_id" ON "categories" ("user_id");',
+    );
+    this.addSql(
+      'CREATE INDEX "idx_transactions_user_id" ON "transactions" ("user_id");',
+    );
+    this.addSql(
+      'CREATE INDEX "idx_transactions_category_id" ON "transactions" ("category_id");',
+    );
+    this.addSql(
+      'CREATE INDEX "idx_transactions_date" ON "transactions" ("date");',
+    );
     this.addSql('CREATE INDEX "idx_budgets_user_id" ON "budgets" ("user_id");');
-    this.addSql('CREATE INDEX "idx_subscriptions_user_id" ON "subscriptions" ("user_id");');
-    this.addSql('CREATE INDEX "idx_subscriptions_billing_day" ON "subscriptions" ("billing_day");');
+    this.addSql(
+      'CREATE INDEX "idx_subscriptions_user_id" ON "subscriptions" ("user_id");',
+    );
+    this.addSql(
+      'CREATE INDEX "idx_subscriptions_billing_day" ON "subscriptions" ("billing_day");',
+    );
   }
 
-  override async down(): Promise<void> {
+  override down(): void {
     this.addSql('DROP TABLE IF EXISTS "subscriptions" CASCADE;');
     this.addSql('DROP TABLE IF EXISTS "budgets" CASCADE;');
     this.addSql('DROP TABLE IF EXISTS "transactions" CASCADE;');
