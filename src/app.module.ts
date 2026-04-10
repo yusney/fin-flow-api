@@ -1,11 +1,12 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { defineConfig } from '@mikro-orm/postgresql';
+import { Migrator } from '@mikro-orm/migrations';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ScheduleModule } from '@nestjs/schedule';
 import { appConfig, jwtConfig } from './config';
-import mikroOrmConfig from './config/mikro-orm.config';
 import { SharedModule } from './shared/shared.module';
 import { PreferencesModule } from './modules/preferences/preferences.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -21,7 +22,21 @@ import { DevDataSeeder } from './seeders/dev-data.seeder';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [appConfig, jwtConfig] }),
-    MikroOrmModule.forRoot(mikroOrmConfig),
+    MikroOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) =>
+        defineConfig({
+          clientUrl: config.get<string>('DATABASE_URL'),
+          entities: ['./dist/**/*.schema.js'],
+          entitiesTs: ['./src/**/*.schema.ts'],
+          extensions: [Migrator],
+          migrations: {
+            path: './src/migrations',
+          },
+          debug: config.get<string>('NODE_ENV') === 'development',
+          allowGlobalContext: true,
+        }),
+    }),
     CqrsModule.forRoot(),
     ScheduleModule.forRoot(),
     SharedModule,
