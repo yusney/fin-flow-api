@@ -28,8 +28,10 @@ pnpm schema:update      # sync schema directly — DEV ONLY, never prod
 Copy `.env.example` → `.env`. Required vars:
 
 ```
-PORT, NODE_ENV, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, JWT_SECRET, JWT_EXPIRES_IN
+PORT, NODE_ENV, DATABASE_URL, JWT_SECRET, JWT_EXPIRES_IN
 ```
+
+Format: `DATABASE_URL=postgresql://user:password@host:5432/dbname`
 
 Local Postgres via Docker: `docker compose up -d` (spins up postgres:16-alpine on 5432).
 
