@@ -20,7 +20,27 @@ export class DevDataSeeder implements OnModuleInit {
   constructor(private readonly em: EntityManager) {}
 
   async onModuleInit(): Promise<void> {
-    await this.seed();
+    // Only run in development environment
+    if (process.env.NODE_ENV === 'production') {
+      this.logger.log('DevDataSeeder: skipped in production environment');
+      return;
+    }
+
+    // Skip in test environment - tests manage their own data
+    if (process.env.NODE_ENV === 'test') {
+      this.logger.log('DevDataSeeder: skipped in test environment');
+      return;
+    }
+
+    try {
+      await this.seed();
+    } catch (error) {
+      // Log error but don't crash the app - dev seeding is not critical
+      this.logger.error(
+        `DevDataSeeder: failed to seed dev data. This is non-fatal, the app will continue. ` +
+          `Error: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
   }
 
   async seed(): Promise<void> {
