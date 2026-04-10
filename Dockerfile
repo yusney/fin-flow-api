@@ -20,6 +20,9 @@ COPY . .
 # Build the application
 RUN pnpm build
 
+# Verify build output exists
+RUN ls -la dist/ && test -f dist/main.js
+
 # Remove dev dependencies after build
 RUN pnpm prune --prod
 
