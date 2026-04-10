@@ -15,8 +15,11 @@ describe('GetSubscriptionPrefillHandler', () => {
     repository = {
       findById: jest.fn(),
       findAll: jest.fn(),
+      findAllForUser: jest.fn(),
+      findByIdForUser: jest.fn(),
       findByName: jest.fn(),
       save: jest.fn(),
+      delete: jest.fn(),
     };
     handler = new GetSubscriptionPrefillHandler(repository);
   });

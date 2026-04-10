@@ -21,6 +21,7 @@ import { BudgetSchema } from '../../src/modules/budgets/infrastructure/persisten
 import { SubscriptionSchema } from '../../src/modules/subscriptions/infrastructure/persistence/subscription.schema';
 import { SubscriptionTemplateSchema } from '../../src/modules/subscription-templates/infrastructure/persistence/subscription-template.schema';
 import { UserPreferencesSchema } from '../../src/modules/preferences/infrastructure/persistence/user-preferences.schema';
+import { GlobalTemplatesSeeder } from '../../src/modules/subscription-templates/infrastructure/seeders/global-templates.seeder';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const supertest = require('supertest');
@@ -68,6 +69,10 @@ export async function createTestApp(): Promise<INestApplication> {
 
   const orm = app.get(MikroORM);
   await orm.schema.refresh();
+
+  // Seed global templates for tests (seeder skips in test env by default)
+  const seeder = app.get(GlobalTemplatesSeeder);
+  await seeder.seed();
 
   return app;
 }
