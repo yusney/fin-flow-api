@@ -10,7 +10,7 @@ import { BillingFrequency } from '../../subscriptions/domain/enums/billing-frequ
 import { SubscriptionType } from '../../subscriptions/domain/enums/subscription-type.enum';
 import { CreateSubscriptionTemplateDto } from './dtos/create-subscription-template.dto';
 
-const MOCK_USER = { sub: 'user-uuid-1234', email: 'test@example.com' };
+const MOCK_USER = { userId: 'user-uuid-1234', email: 'test@example.com' };
 
 describe('SubscriptionTemplatesController', () => {
   let controller: SubscriptionTemplatesController;
@@ -48,7 +48,7 @@ describe('SubscriptionTemplatesController', () => {
 
       expect(result).toEqual(templates);
       expect(queryBus.execute).toHaveBeenCalledWith(
-        new GetSubscriptionTemplatesQuery(MOCK_USER.sub, undefined),
+        new GetSubscriptionTemplatesQuery(MOCK_USER.userId, undefined),
       );
     });
 
@@ -64,7 +64,7 @@ describe('SubscriptionTemplatesController', () => {
       expect(result).toEqual(templates);
       expect(queryBus.execute).toHaveBeenCalledWith(
         new GetSubscriptionTemplatesQuery(
-          MOCK_USER.sub,
+          MOCK_USER.userId,
           TemplateCategory.STREAMING,
         ),
       );
@@ -80,7 +80,7 @@ describe('SubscriptionTemplatesController', () => {
 
       expect(result).toEqual(template);
       expect(queryBus.execute).toHaveBeenCalledWith(
-        new GetSubscriptionTemplateQuery('tpl-uuid', MOCK_USER.sub),
+        new GetSubscriptionTemplateQuery('tpl-uuid', MOCK_USER.userId),
       );
     });
   });
@@ -140,7 +140,7 @@ describe('SubscriptionTemplatesController', () => {
       expect(result).toEqual(created);
       expect(commandBus.execute).toHaveBeenCalledWith(
         new CreateSubscriptionTemplateCommand(
-          MOCK_USER.sub,
+          MOCK_USER.userId,
           dto.name,
           dto.templateCategory,
           dto.description,
