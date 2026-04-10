@@ -9,17 +9,24 @@ if [ "$SKIP_MIGRATIONS" != "true" ]; then
     node -e "
         const config = require('./dist/src/config/mikro-orm.config.js');
         const { MikroORM } = require('@mikro-orm/postgresql');
+        const { Migrator } = require('@mikro-orm/migrations');
         
         (async () => {
             try {
                 const orm = await MikroORM.init(config.default);
-                const migrator = orm.getMigrator();
-                const pending = await migrator.getPendingMigrations();
+                const migrator = new Migrator(orm.em);
+                await migrator.init(orm);
                 
-                if (pending.length > 0) {
-                    console.log('Pending migrations:', pending.map(m => m.name).join(', '));
-                    await migrator.up();
-                    console.log('✅ Migrations completed successfully');
+                // Get executed migrations count
+                const storage = migrator.getStorage();
+                const executed = await storage.getExecutedMigrations();
+                console.log('Already executed:', executed.length, 'migrations');
+                
+                // Run any pending migrations
+                const result = await migrator.runMigrations();
+                
+                if (result.length > 0) {
+                    console.log('✅ Executed', result.length, 'new migration(s):', result.map(m => m.name).join(', '));
                 } else {
                     console.log('✅ No pending migrations');
                 }
