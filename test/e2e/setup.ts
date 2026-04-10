@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { MikroORM, defineConfig } from '@mikro-orm/sqlite';
+import { MikroORM, defineConfig } from '@mikro-orm/postgresql';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -24,7 +24,9 @@ import { SubscriptionTemplateSchema } from '../../src/modules/subscription-templ
 const supertest = require('supertest');
 
 const testOrmConfig = defineConfig({
-  dbName: ':memory:',
+  clientUrl:
+    process.env.DATABASE_URL ||
+    'postgresql://postgres:postgres@localhost:5432/fin_flow_test',
   entities: [
     UserSchema,
     CategorySchema,
