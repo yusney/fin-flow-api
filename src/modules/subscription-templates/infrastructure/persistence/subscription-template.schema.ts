@@ -10,6 +10,10 @@ export const SubscriptionTemplateSchema =
         properties: ['category'],
         name: 'idx_subscription_templates_template_category',
       },
+      {
+        properties: ['userId'],
+        name: 'idx_subscription_templates_user_id',
+      },
     ],
     properties: {
       id: { type: 'uuid', primary: true },
@@ -31,6 +35,7 @@ export const SubscriptionTemplateSchema =
         type: 'decimal',
         fieldName: 'default_amount',
         columnType: 'decimal(12,2)',
+        default: 0,
       },
       defaultFrequency: {
         type: 'string',
@@ -39,6 +44,17 @@ export const SubscriptionTemplateSchema =
         default: 'MONTHLY',
       },
       category: { type: 'string', fieldName: 'template_category', length: 30 },
+      ownership: {
+        type: 'string',
+        fieldName: 'ownership',
+        length: 10,
+        default: 'GLOBAL',
+      },
+      userId: {
+        type: 'uuid',
+        fieldName: 'user_id',
+        nullable: true,
+      },
       createdAt: {
         type: 'datetime',
         fieldName: 'created_at',
@@ -53,8 +69,8 @@ export const SubscriptionTemplateSchema =
     },
     uniques: [
       {
-        properties: ['name'],
-        name: 'uq_subscription_templates_name',
+        properties: ['name', 'ownership', 'userId'],
+        name: 'uq_subscription_templates_name_ownership_user',
       },
     ],
   });

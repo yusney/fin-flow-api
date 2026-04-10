@@ -57,7 +57,7 @@ export class MikroOrmTransactionRepository implements ITransactionRepository {
       FROM transactions t
       JOIN categories c ON t.category_id = c.id
       WHERE t.user_id = ? AND t.date >= ? AND t.date < ?`,
-      [userId, startDate.getTime(), endDate.getTime()],
+      [userId, startDate, endDate],
     );
     const result = rawResult as {
       total_income: string;

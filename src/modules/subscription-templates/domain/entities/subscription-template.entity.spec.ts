@@ -1,6 +1,7 @@
 import { ValidationException } from '../../../../shared/domain/exceptions';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 import { TemplateCategory } from '../enums/template-category.enum';
+import { TemplateOwnership } from '../enums/template-ownership.enum';
 import { SubscriptionTemplate } from './subscription-template.entity';
 
 describe('SubscriptionTemplate Entity', () => {
@@ -25,6 +26,8 @@ describe('SubscriptionTemplate Entity', () => {
       expect(template.defaultAmount).toBe(15.99);
       expect(template.defaultFrequency).toBe(BillingFrequency.MONTHLY);
       expect(template.category).toBe(TemplateCategory.STREAMING);
+      expect(template.ownership).toBe(TemplateOwnership.GLOBAL);
+      expect(template.userId).toBeNull();
       expect(template.id).toBeDefined();
       expect(template.id).toMatch(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
@@ -37,6 +40,36 @@ describe('SubscriptionTemplate Entity', () => {
         serviceUrl: null,
       });
       expect(template.serviceUrl).toBeNull();
+    });
+
+    it('should create a USER-owned template with userId', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        ownership: TemplateOwnership.USER,
+        userId: 'user-uuid-123',
+      });
+      expect(template.ownership).toBe(TemplateOwnership.USER);
+      expect(template.userId).toBe('user-uuid-123');
+    });
+
+    it('should default ownership to GLOBAL and userId to null', () => {
+      const template = SubscriptionTemplate.create(validProps);
+      expect(template.ownership).toBe(TemplateOwnership.GLOBAL);
+      expect(template.userId).toBeNull();
+    });
+
+    it('should allow defaultAmount of 0 (template with unknown price)', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        defaultAmount: 0,
+      });
+      expect(template.defaultAmount).toBe(0);
+    });
+
+    it('should throw ValidationException when defaultAmount is negative', () => {
+      expect(() =>
+        SubscriptionTemplate.create({ ...validProps, defaultAmount: -5 }),
+      ).toThrow(ValidationException);
     });
 
     it('should throw ValidationException when name is empty', () => {
@@ -72,20 +105,11 @@ describe('SubscriptionTemplate Entity', () => {
       expect(template.name).toBe('Netflix');
     });
 
-    it('should throw ValidationException when defaultAmount is not positive', () => {
-      expect(() =>
-        SubscriptionTemplate.create({ ...validProps, defaultAmount: 0 }),
-      ).toThrow(ValidationException);
-      expect(() =>
-        SubscriptionTemplate.create({ ...validProps, defaultAmount: -5 }),
-      ).toThrow(ValidationException);
-    });
-
     it('should throw ValidationException for invalid category', () => {
       expect(() =>
         SubscriptionTemplate.create({
           ...validProps,
-          category: 'INVALID' as any,
+          category: 'INVALID' as TemplateCategory,
         }),
       ).toThrow(ValidationException);
     });
@@ -94,7 +118,7 @@ describe('SubscriptionTemplate Entity', () => {
       expect(() =>
         SubscriptionTemplate.create({
           ...validProps,
-          defaultFrequency: 'WEEKLY' as any,
+          defaultFrequency: 'WEEKLY' as BillingFrequency,
         }),
       ).toThrow(ValidationException);
     });
@@ -127,15 +151,18 @@ describe('SubscriptionTemplate Entity', () => {
       );
     });
 
-    it('should validate defaultAmount on update', () => {
+    it('should validate defaultAmount on update — reject negative', () => {
       const template = SubscriptionTemplate.create(validProps);
 
       expect(() => template.update({ defaultAmount: -1 })).toThrow(
         ValidationException,
       );
-      expect(() => template.update({ defaultAmount: 0 })).toThrow(
-        ValidationException,
-      );
+    });
+
+    it('should allow defaultAmount of 0 on update', () => {
+      const template = SubscriptionTemplate.create(validProps);
+      template.update({ defaultAmount: 0 });
+      expect(template.defaultAmount).toBe(0);
     });
 
     it('should trim name on update', () => {
@@ -145,16 +172,65 @@ describe('SubscriptionTemplate Entity', () => {
     });
   });
 
+  describe('isGlobal / isOwnedBy', () => {
+    it('should return true for isGlobal on GLOBAL template', () => {
+      const template = SubscriptionTemplate.create(validProps);
+      expect(template.isGlobal()).toBe(true);
+    });
+
+    it('should return false for isGlobal on USER template', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        ownership: TemplateOwnership.USER,
+        userId: 'user-1',
+      });
+      expect(template.isGlobal()).toBe(false);
+    });
+
+    it('should return true for isOwnedBy matching userId', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        ownership: TemplateOwnership.USER,
+        userId: 'user-1',
+      });
+      expect(template.isOwnedBy('user-1')).toBe(true);
+    });
+
+    it('should return false for isOwnedBy non-matching userId', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        ownership: TemplateOwnership.USER,
+        userId: 'user-1',
+      });
+      expect(template.isOwnedBy('user-2')).toBe(false);
+    });
+  });
+
   describe('toJSON', () => {
-    it('should not include ownership or userId', () => {
+    it('should include ownership, userId and templateCategory in response', () => {
       const template = SubscriptionTemplate.create(validProps);
       const json = template.toJSON();
 
-      expect(json).not.toHaveProperty('ownership');
-      expect(json).not.toHaveProperty('userId');
+      expect(json).toHaveProperty('ownership', TemplateOwnership.GLOBAL);
+      expect(json).toHaveProperty('userId', null);
+      expect(json).toHaveProperty(
+        'templateCategory',
+        TemplateCategory.STREAMING,
+      );
       expect(json).toHaveProperty('id');
       expect(json).toHaveProperty('name');
-      expect(json).toHaveProperty('category');
+    });
+
+    it('should include USER ownership and userId for user templates', () => {
+      const template = SubscriptionTemplate.create({
+        ...validProps,
+        ownership: TemplateOwnership.USER,
+        userId: 'user-uuid-123',
+      });
+      const json = template.toJSON();
+
+      expect(json).toHaveProperty('ownership', TemplateOwnership.USER);
+      expect(json).toHaveProperty('userId', 'user-uuid-123');
     });
   });
 });

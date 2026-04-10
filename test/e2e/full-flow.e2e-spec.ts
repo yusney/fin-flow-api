@@ -148,6 +148,7 @@ describe('Full User Journey (e2e)', () => {
         description: 'Meal Kit Delivery',
         billingDay: 1,
         categoryId: foodCategoryId,
+        startDate: dateStr,
       })
       .expect(201);
 

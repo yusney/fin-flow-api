@@ -6,6 +6,8 @@ import { TemplateCategory } from '../../domain/enums/template-category.enum';
 import { BillingFrequency } from '../../../subscriptions/domain/enums/billing-frequency.enum';
 import { NotFoundException } from '../../../../shared/domain/exceptions';
 
+const TEST_USER_ID = 'user-uuid-1234';
+
 describe('GetSubscriptionTemplateHandler', () => {
   let handler: GetSubscriptionTemplateHandler;
   let repository: jest.Mocked<ISubscriptionTemplateRepository>;
@@ -14,8 +16,11 @@ describe('GetSubscriptionTemplateHandler', () => {
     repository = {
       findById: jest.fn(),
       findAll: jest.fn(),
+      findAllForUser: jest.fn(),
+      findByIdForUser: jest.fn(),
       findByName: jest.fn(),
       save: jest.fn(),
+      delete: jest.fn(),
     };
     handler = new GetSubscriptionTemplateHandler(repository);
   });
@@ -30,21 +35,30 @@ describe('GetSubscriptionTemplateHandler', () => {
       defaultFrequency: BillingFrequency.MONTHLY,
       category: TemplateCategory.STREAMING,
     });
-    repository.findById.mockResolvedValue(template);
+    repository.findByIdForUser.mockResolvedValue(template);
 
-    const query = new GetSubscriptionTemplateQuery(template.id);
+    const query = new GetSubscriptionTemplateQuery(template.id, TEST_USER_ID);
     const result = await handler.execute(query);
 
     expect(result).toEqual(template);
-    expect(repository.findById).toHaveBeenCalledWith(template.id);
+    expect(repository.findByIdForUser).toHaveBeenCalledWith(
+      template.id,
+      TEST_USER_ID,
+    );
   });
 
   it('should throw NotFoundException when template not found', async () => {
-    repository.findById.mockResolvedValue(null);
+    repository.findByIdForUser.mockResolvedValue(null);
 
-    const query = new GetSubscriptionTemplateQuery('non-existent-id');
+    const query = new GetSubscriptionTemplateQuery(
+      'non-existent-id',
+      TEST_USER_ID,
+    );
 
     await expect(handler.execute(query)).rejects.toThrow(NotFoundException);
-    expect(repository.findById).toHaveBeenCalledWith('non-existent-id');
+    expect(repository.findByIdForUser).toHaveBeenCalledWith(
+      'non-existent-id',
+      TEST_USER_ID,
+    );
   });
 });
