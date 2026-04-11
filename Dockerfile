@@ -56,7 +56,8 @@ USER nestjs
 EXPOSE 3000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# start-period=60s: allows time for migrations + NestJS startup + seeders
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))" || exit 1
 
 # Run migrations and start the application
