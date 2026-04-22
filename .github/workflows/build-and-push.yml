@@ -70,9 +70,16 @@ jobs:
           push-to-registry: true
 
       - name: Trigger Dokploy auto-deploy
+        env:
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
         run: |
+          if [ -z "$DOKPLOY_WEBHOOK_URL" ]; then
+            echo "::warning::DOKPLOY_WEBHOOK_URL secret is not set. Skipping Dokploy deployment trigger."
+            exit 0
+          fi
+
           echo "Triggering Dokploy deployment..."
-          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${{ secrets.DOKPLOY_WEBHOOKS }}")
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$DOKPLOY_WEBHOOK_URL")
           echo "Dokploy responded with HTTP $HTTP_CODE"
           if [ "$HTTP_CODE" -ne 200 ]; then
             echo "::warning::Dokploy webhook returned HTTP $HTTP_CODE"
