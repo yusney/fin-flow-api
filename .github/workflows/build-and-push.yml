@@ -71,10 +71,10 @@ jobs:
 
       - name: Trigger Dokploy auto-deploy
         env:
-          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOKS }}
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
         run: |
           if [ -z "$DOKPLOY_WEBHOOK_URL" ]; then
-            echo "::warning::DOKPLOY_WEBHOOKS secret is not set. Skipping Dokploy deployment trigger."
+            echo "::warning::DOKPLOY_WEBHOOK_URL secret is not set. Skipping Dokploy deployment trigger."
             exit 0
           fi
 
