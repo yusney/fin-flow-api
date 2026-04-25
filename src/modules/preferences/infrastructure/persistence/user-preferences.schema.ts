@@ -7,6 +7,7 @@ export const UserPreferencesSchema = new EntitySchema<UserPreferences>({
   tableName: 'user_preferences',
   properties: {
     id: { type: 'uuid', primary: true },
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     userId: {
       kind: 'm:1',
       entity: () => User,
