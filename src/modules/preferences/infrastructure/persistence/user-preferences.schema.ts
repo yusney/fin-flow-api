@@ -1,4 +1,5 @@
 import { EntitySchema } from '@mikro-orm/core';
+import { User } from '../../../auth/domain/entities/user.entity';
 import { UserPreferences } from '../../domain/entities/user-preferences.entity';
 
 export const UserPreferencesSchema = new EntitySchema<UserPreferences>({
@@ -6,7 +7,14 @@ export const UserPreferencesSchema = new EntitySchema<UserPreferences>({
   tableName: 'user_preferences',
   properties: {
     id: { type: 'uuid', primary: true },
-    userId: { type: 'uuid', fieldName: 'user_id', unique: true },
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    userId: {
+      kind: 'm:1',
+      entity: () => User,
+      fieldName: 'user_id',
+      unique: true,
+      mapToPk: true,
+    } as any,
     currency: { type: 'string', length: 3 },
     dateFormat: { type: 'string', length: 10, fieldName: 'date_format' },
     language: { type: 'string', length: 2 },
